@@ -1,5 +1,6 @@
 #include "galuafield.h"
 #include "galuarow.h"
+#include "koder.h"
 #include <QTextStream>
 #include <QString>
 #include <QBitArray>
@@ -50,7 +51,7 @@ int main()
     }
 
     //cout << "M (2 <= M <= 15): "<<QString::number(m);
-    cout.flush();
+    //cout.flush();
 
     //cin >> m;
     cout<<"(n, k, d)"<<endl;

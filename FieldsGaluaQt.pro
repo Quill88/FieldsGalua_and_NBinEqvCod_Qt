@@ -17,8 +17,10 @@ TEMPLATE = app
 
 SOURCES += main.cpp \
     galuafield.cpp \
-    galuarow.cpp
+    galuarow.cpp \
+    koder.cpp
 
 HEADERS += \
     galuafield.h \
-    galuarow.h
+    galuarow.h \
+    koder.h
