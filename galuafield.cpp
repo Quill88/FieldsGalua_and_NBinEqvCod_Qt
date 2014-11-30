@@ -313,6 +313,14 @@ int GaluaField::umnozh(int &a, int &b)
     return i+1;
 }
 
+int GaluaField::del(int &a, int &b)
+{
+    int obr;
+    if(a==1)obr = 1;
+    else obr = (m - b) + 1;
+    return umnozh(a, obr);
+}
+
 void GaluaField::FillOper()
 {
     pl = new int* [size];

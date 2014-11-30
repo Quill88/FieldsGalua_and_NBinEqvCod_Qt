@@ -1,18 +1,24 @@
 #ifndef KODER_H
 #define KODER_H
 
+#include <QString>
+#include <QDebug>
 #include "galuafield.h"
 #include "galuarow.h"
 
 class Koder
 {
 private:
-    GaluaField *f;
-    int MakeField();
+    bool MakeField();
+    bool MakeH();
+    bool MakeG();
     //Koder(int, int, int);
 public:
-    int n, k, d, m;
-    Koder(int, int);
+    int** H;
+    int** G;
+    GaluaField *f;
+    int n, k, d, m, t;
+    Koder(int t, int k);
     void Init();
     ~Koder();
 

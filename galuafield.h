@@ -26,6 +26,7 @@ public:
 
     int plus(int&, int&);
     int umnozh(int&, int&);
+    int del(int&, int&);
     double determ(int**, int);
 
     int size;
