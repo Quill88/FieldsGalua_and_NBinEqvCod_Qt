@@ -12,15 +12,22 @@ private:
     bool MakeField();
     bool MakeH();
     bool MakeG();
-    //Koder(int, int, int);
+
+    int* CStar;
+    int* S;
+
 public:
     int** H;
     int** G;
+
     GaluaField *f;
     int n, k, d, m, t;
     Koder(int t, int k);
     void Init();
     ~Koder();
+
+    void encode(QString I);
+    QString decode();
 
     GaluaRow getRow(int);
 };

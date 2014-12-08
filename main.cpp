@@ -24,7 +24,7 @@ int main()
     timer = QTime::currentTime();
     cout<<timer.toString("hh:mm:ss.zzz")<<endl;
 
-    cout << "Vvedite t: ";
+    cout << "Enter t: ";
     cout.flush();
     int t;
     try {
@@ -32,7 +32,7 @@ int main()
     } catch (...) {
         cout<<"Error!!!";
     }
-    cout << "Vvedite k: ";
+    cout << "Enter k: ";
     cout.flush();
     int k;
     try {
@@ -50,6 +50,22 @@ int main()
     timer = QTime::currentTime();
     cout<<timer.toString("hh:mm:ss.zzz")<<endl;
 
+    cout << "Enter I (lenth="<<k<<"): ";
+    cout.flush();
+    QString I;
+    try {
+        cin >> I;
+    } catch (...) {
+        cout<<"Error!!!";
+    }
+    cout<<endl;
+
+    K.encode(I);
+    QString temp = K.decode();
+    qDebug()<<endl<<"I: "<<temp<<endl;
+
+
+
     QMapIterator<int, GaluaRow> i(K.f->Field);
     fout << "no\t" << "bin\t" << "L\t" << "poly\t" << endl;
     while (i.hasNext())
@@ -61,20 +77,20 @@ int main()
     }
 
     QString fout2 = "  ";
-    fout << "+" << endl;
+    fout << endl << "+" << endl;
     fout << "  " << "\t";
     fout2 += " \t";
     for(int i = 0; i < K.f->size; ++i)
     {
-        fout << QString::number(i) << "\t";
-        fout2 += QString::number(i) + "\t";
+        fout << QString::number(i) << ".\t";
+        fout2 += QString::number(i) + ".\t";
     }
     fout << endl;
     fout2 += "\n";
     for(int i = 0; i < K.f->size; ++i)
     {
-        fout << QString::number(i) + "\t";
-        fout2 += QString::number(i) + "\t";
+        fout << QString::number(i) + "|\t";
+        fout2 += QString::number(i) + "|\t";
         for(int j = 0; j < K.f->size; ++j)
         {
             fout << QString::number(K.f->pl[i][j]) << "\t";
@@ -85,55 +101,24 @@ int main()
     }
     fout << endl << "*" << endl << fout2;
 
+    fout << endl << "/" << endl << "\t";
+    for(int i = 0; i < K.f->size; ++i)
+    {
+        fout << QString::number(i) << ".\t";
+    }
+    fout << endl;
+    for(int i = 0; i < K.f->size; ++i)
+    {
+        fout << QString::number(i) + "|\t";
+        for(int j = 0; j < K.f->size; ++j)
+        {
+            fout << QString::number(K.f->del(i,j)) << "\t";
+        }
+        fout << endl;
+    }
 
     timer = QTime::currentTime();
     cout<<timer.toString("hh:mm:ss.zzz")<<endl;
 
-//    fout<<endl<<"Rand matrix:"<<endl;
-//    int** j = f.RandMatrixSize();
-
-//    for(int k = 0; k < f.size; ++k)
-//    {
-//        for(int n = 0; n < f.size; ++n)
-//        {
-//            fout << QString::number( j[k][n] ) << "\t";
-//        }
-//        fout<<endl;
-//    }
-
-//    double** iMatr = f.inverseMatrixSize(j);
-//    fout<<endl<<"Inverse Matrix"<<endl;
-//    for(int k = 0; k < f.size; ++k)
-//    {
-//        for(int n = 0; n < f.size; ++n)
-//        {
-//            fout << QString::number( iMatr[k][n] ) << "\t";
-//        }
-//        fout<<endl;
-//    }
-
-//    fout<<endl<<"Matrix mult number "<<QString::number(m)<<endl;
-//    f.MatrixMult(j, static_cast<double>(m));
-//    for(int k = 0; k < f.size; ++k)
-//    {
-//        for(int n = 0; n < f.size; ++n)
-//        {
-//            fout << QString::number(j[k][n]) << "\t";
-//        }
-//        fout<<endl;
-//    }
-
-//    for(int i = 0; i < f.size; ++i)
-//    {
-//        delete [] j[i];
-//        delete [] iMatr[i];
-//    }
-//    delete [] j;
-//    delete [] iMatr;
-
-//    timer = QTime::currentTime();
-//    cout<<timer.toString("hh:mm:ss.zzz")<<endl;
-
-    //system("pause");
     return 0;
 }

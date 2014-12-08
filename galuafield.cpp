@@ -109,81 +109,9 @@ GaluaField::GaluaField(int &m)
         GPB.insert(15, a);
         break;
     }
-//    GP.insert(2, "x2 + x + 1");
-//    GP.insert(3, "x3 + x + 1");
-//    GP.insert(4, "x4 + x + 1");
-//    GP.insert(5, "x5 + x2 + 1");
-//    GP.insert(6, "x6 + x + 1");
-//    GP.insert(7, "x7 + x3 + 1");
-//    GP.insert(8, "x8 + x4 + x3 + x2 + 1");
-//    GP.insert(9, "x9 + x4 + 1");
-//    GP.insert(10, "x10 + x3 + 1");
-//    GP.insert(11, "x11 + x2 + 1");
-//    GP.insert(12, "x12 + x6 + x4 + x + 1");
-//    GP.insert(13, "x13 + x4 + x3 + x + 1");
-//    GP.insert(14, "x14 + x10 + x6 + x + 1");
-//    GP.insert(15, "x15 + x + 1");
 
-
-//    a[0] = true; a[1] = true; a[2] = true;
-//    GPB.insert(2, a);
-//    a.resize(4);
-//    a[0] = true; a[1] = true; a[2] = false; a[3] = true;
-//    GPB.insert(3, a);
-//    a.resize(5);
-//    a[0] = true; a[1] = true; a[2] = false; a[3] = false; a[4] = true;
-//    GPB.insert(4, a);
-//    a.resize(6);
-//    a[0] = true; a[1] = false; a[2] = true; a[3] = false; a[4] = false;
-//    a[5] = true;
-//    GPB.insert(5, a);
-//    a.resize(7);
-//    a[0] = true;  a[1] = true; a[2] = false; a[3] = false; a[4] = false;
-//    a[5] = false; a[6] = true;
-//    GPB.insert(6, a);
-//    a.resize(8);
-//    a[0] = true;    a[1] = false; a[2] = false; a[3] = false; a[4] = true;
-//    a[5] = false;   a[6] = false; a[7] = true;
-//    GPB.insert(7, a);
-//    a.resize(9);
-//    a[0] = true;  a[1] = false; a[2] = true;  a[3] = true; a[4] = true;
-//    a[5] = false; a[6] = false; a[7] = false; a[8] = true;
-//    GPB.insert(8, a);
-//    a.resize(10);
-//    a[0] = true;  a[1] = false; a[2] = false; a[3] = false; a[4] = true;
-//    a[5] = false; a[6] = false; a[7] = false; a[8] = false; a[9] = true;
-//    GPB.insert(9, a);
-//    a.resize(11);
-//    a[0] = true;  a[1] = false; a[2] = false; a[3] = true;  a[4] = false;
-//    a[5] = false; a[6] = false; a[7] = false; a[8] = false; a[9] = false;
-//    a[10] = true;
-//    GPB.insert(10, a);
-//    a.resize(12);
-//    a[0] = true;    a[1] = false;   a[2] = true;    a[3] = false;    a[4] = false;
-//    a[5] = false;   a[6] = false;   a[7] = false;   a[8] = false;    a[9] = false;
-//    a[10] = false;   a[11] = true;
-//    GPB.insert(11, a);
-//    a.resize(13);
-//    a[0] = true;    a[1] = true;   a[2] = false;   a[3] = false;    a[4] = true;
-//    a[5] = false;   a[6] = true;   a[7] = false;   a[8] = false;    a[9] = false;
-//    a[10] = false;   a[11] = false;   a[12] = true;
-//    GPB.insert(12, a);
-//    a.resize(14);
-//    a[0] = true;    a[1] = true;   a[2] = false;   a[3] = true;    a[4] = true;
-//    a[5] = false;   a[6] = false;  a[7] = false;   a[8] = false;   a[9] = false;
-//    a[10] = false;  a[11] = false; a[12] = false;  a[13] = true;
-//    GPB.insert(13, a);
-//    a.resize(15);
-//    a[0] = true;    a[1] = true;   a[2] = false;   a[3] = false;   a[4] = false;
-//    a[5] = false;   a[6] = true;   a[7] = false;   a[8] = false;   a[9] = false;
-//    a[10] = true;   a[11] = false; a[12] = false;  a[13] = false;  a[14] = true;
-//    GPB.insert(14, a);
-//    a.resize(16);
-//    a[0] = true;    a[1] = true;   a[2] = false;   a[3] = false;   a[4] = false;
-//    a[5] = false;   a[6] = false;  a[7] = false;   a[8] = false;   a[9] = false;
-//    a[10] = false;  a[11] = false; a[12] = false;  a[13] = false;  a[14] = false;
-//    a[15] = true;
-//    GPB.insert(15, a);
+    QTime time = QTime::currentTime();
+    qsrand((uint)time.msec());
 
     FillField();
     FillOper();
@@ -309,15 +237,17 @@ int GaluaField::plus(int &a, int &b)
 
 int GaluaField::umnozh(int &a, int &b)
 {
-    int i = (Field[a].alpha + Field[b].alpha) % (size-1);
-    return i+1;
+    int i = 0;
+    if(a!=0 && b!=0)
+        i = ((Field[a].alpha + Field[b].alpha) % (size-1))+1;
+    return i;
 }
 
 int GaluaField::del(int &a, int &b)
 {
-    int obr;
-    if(a==1)obr = 1;
-    else obr = (m - b) + 1;
+    int obr = 0;
+    if(b==1) obr = 1;
+    if(b > 1) obr = ((size-1) - (b-1)) + 1;
     return umnozh(a, obr);
 }
 
@@ -438,7 +368,6 @@ void GaluaField::MatrixMult(int **a, double b)
         for(int j = 0; j < size; ++j)
         {
             a[i][j] = (static_cast<int>(a[i][j] * b)%size);
-            //a[i][j] = !a[i][j] ? 1 : a[i][j];
         }
     }
 }
@@ -487,4 +416,19 @@ double GaluaField::determ(int** Arr, int size)
                 delete[] matr;
         }
         return det;
+}
+
+int GaluaField::randIntInField()
+{
+    return qrand() % (size - 1) + 1;
+}
+
+int GaluaField::powerNum(int num, int power)
+{
+    int temp = num;
+    for(int i = 1; i < power; ++i)
+    {
+        temp = um[temp][num];
+    }
+    return temp;
 }

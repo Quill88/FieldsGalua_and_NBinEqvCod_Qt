@@ -3,8 +3,9 @@
 #include <QMap>
 #include <QString>
 #include <QBitArray>
-#include <math.h>
+#include <QGlobal.h>
 #include <QTime>
+#include <qmath.h>
 #define GALUAFIELD_H
 
 
@@ -31,6 +32,8 @@ public:
 
     int size;
 
+    int powerNum(int num, int power);
+    int randIntInField();
     int** RandMatrixSize();
     double** inverseMatrixSize(int** matrix);
     void MatrixMult(int**, double);
