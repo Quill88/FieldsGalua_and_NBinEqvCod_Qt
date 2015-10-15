@@ -12,11 +12,11 @@ public:
 	nBinEqvVec();
 	~nBinEqvVec();
 
-	QString ToStr();
-
-
+    QString ToStr();
 
 	int A;
+    QString Ca;
+
 
 };
 

@@ -9,11 +9,16 @@
 #include <QMapIterator>
 #include <QFile>
 #include <QTime>
+#include <QDebug>
 
 int main()
 {
-	nBinEqvCod K(4, 2, 4);
-
+	nBinEqvCod K(3, 1, 4);
+	for (int i = 0; i < K.getM(); ++i)
+	{
+		qDebug() << K.getEqvVec(i);
+	}
+	
 
     return 0;
 }

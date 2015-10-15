@@ -15,13 +15,14 @@ public:
 	~nBinEqvCod();
 
 	QString getEqvVec(int A);
-
+	int getM() const;
 private:
 	int M;
 	int n;
 	int w;
 	int q;
-	
+	int qw;
+
 	nBinEqvVec calc_eVec(int A);
 
 	int fact(const int& n);
