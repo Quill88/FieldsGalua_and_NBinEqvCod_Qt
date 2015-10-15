@@ -306,10 +306,13 @@ QString Koder::decode()
     {
         for(int j = i+1; j < t; ++j)
         {
-            tmp = f->del(A[j][i], A[i][i]);
-            for(int itD = i; itD < t+1; ++itD)
+            if(A[i][i]!=0)
             {
-                A[j][itD] = f->pl[A[j][itD]][f->um[A[i][itD]][tmp]];
+                tmp = f->del(A[j][i], A[i][i]);
+                for(int itD = i; itD < t+1; ++itD)
+                {
+                    A[j][itD] = f->pl[A[j][itD]][f->um[A[i][itD]][tmp]];
+                }
             }
         }
     }
@@ -318,10 +321,13 @@ QString Koder::decode()
     {
         for(int j = i-1; j >= 0; --j)
         {
-            tmp = f->del(A[j][i], A[i][i]);
-            for(int itD = 0; itD < t+1; ++itD)
-            {
-                A[j][itD] = f->pl[A[j][itD]][f->um[A[i][itD]][tmp]];
+            if(A[i][i]!=0)
+            {\
+                tmp = f->del(A[j][i], A[i][i]);
+                for(int itD = 0; itD < t+1; ++itD)
+                {
+                    A[j][itD] = f->pl[A[j][itD]][f->um[A[i][itD]][tmp]];
+                }
             }
         }
     }
@@ -414,19 +420,26 @@ QString Koder::decode()
     {
         for(int j = i+1; j < t; ++j)
         {
-            tmp = f->del(E[j][i], E[i][i]);
-            for(int ij = 0; ij < t+1; ++ij)
-                E[j][ij] = f->pl[E[j][ij]][f->um[E[i][ij]][tmp]];
+            if(E[i][i]!=0)
+            {
+                tmp = f->del(E[j][i], E[i][i]);
+                for(int ij = 0; ij < t+1; ++ij)
+                    E[j][ij] = f->pl[E[j][ij]][f->um[E[i][ij]][tmp]];
+            }
+
         }
     }
     for(int i = 1; i < t; ++i)
     {
         for(int j = i+1; j < t; ++j)
         {
-            tmp = f->del(E[j][i], E[i][i]);
-            for(int itD = i; itD < t+1; ++itD)
+            if(E[i][i]!=0)
             {
-                E[j][itD] = f->pl[E[j][itD]][f->um[E[i][itD]][tmp]];
+                tmp = f->del(E[j][i], E[i][i]);
+                for(int itD = i; itD < t+1; ++itD)
+                {
+                    E[j][itD] = f->pl[E[j][itD]][f->um[E[i][itD]][tmp]];
+                }
             }
         }
     }
@@ -435,10 +448,13 @@ QString Koder::decode()
     {
         for(int j = i-1; j >= 0; --j)
         {
-            tmp = f->del(E[j][i], E[i][i]);
-            for(int itD = 0; itD < t+1; ++itD)
+            if(E[i][i] != 0)
             {
-                E[j][itD] = f->pl[E[j][itD]][f->um[E[i][itD]][tmp]];
+                tmp = f->del(E[j][i], E[i][i]);
+                for(int itD = 0; itD < t+1; ++itD)
+                {
+                    E[j][itD] = f->pl[E[j][itD]][f->um[E[i][itD]][tmp]];
+                }
             }
         }
     }

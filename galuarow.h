@@ -1,3 +1,4 @@
+#pragma once
 #ifndef GALUAROW_H
 #include <QBitArray>
 #include <QString>

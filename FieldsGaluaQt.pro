@@ -1,26 +1,25 @@
-#-------------------------------------------------
-#
-# Project created by QtCreator 2014-09-29T01:55:01
-#
-#-------------------------------------------------
-
-QT       += core
-
-QT       -= gui
-
-TARGET = FieldsGaluaQt
-CONFIG   += console
-CONFIG   -= app_bundle
-
 TEMPLATE = app
-
-
-SOURCES += main.cpp \
-    galuafield.cpp \
-    galuarow.cpp \
-    koder.cpp
-
-HEADERS += \
-    galuafield.h \
-    galuarow.h \
-    koder.h
+TARGET = FieldsGaluaQt
+DESTDIR = ./debug
+QT += core
+CONFIG += debug console
+DEFINES += _CONSOLE
+INCLUDEPATH += . \
+    ./debug \
+    $(QTDIR)/mkspecs/win32-msvc2013
+DEPENDPATH += .
+MOC_DIR += ./GeneratedFiles/debug
+OBJECTS_DIR += debug
+UI_DIR += ./GeneratedFiles
+RCC_DIR += ./GeneratedFiles
+HEADERS += ./galuafield.h \
+    ./galuarow.h \
+    ./koder.h \
+    ./nBinEqvCod.h \
+    ./nBinEqvVec.h
+SOURCES += ./galuafield.cpp \
+    ./galuarow.cpp \
+    ./koder.cpp \
+    ./main.cpp \
+    ./nBinEqvCod.cpp \
+    ./nBinEqvVec.cpp

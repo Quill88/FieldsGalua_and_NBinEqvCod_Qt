@@ -1,3 +1,4 @@
+#pragma once
 #ifndef KODER_H
 #define KODER_H
 

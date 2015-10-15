@@ -1,3 +1,4 @@
+#pragma once
 #ifndef GALUAFIELD_H
 #include "galuarow.h"
 #include <QMap>

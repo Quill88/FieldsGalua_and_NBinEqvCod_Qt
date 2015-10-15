@@ -1,6 +1,7 @@
 #include "galuafield.h"
 #include "galuarow.h"
 #include "koder.h"
+#include "nBinEqvCod.h"
 #include <QTextStream>
 #include <QString>
 #include <QBitArray>
@@ -11,7 +12,13 @@
 
 int main()
 {
-    QTime timer;
+	nBinEqvCod K(4, 2, 4);
+
+
+    return 0;
+}
+
+/*QTime timer;
     QFile file("out.txt");
         if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
             return 0;
@@ -50,6 +57,8 @@ int main()
     timer = QTime::currentTime();
     cout<<timer.toString("hh:mm:ss.zzz")<<endl;
 
+
+	
     cout << "Enter I (lenth="<<k<<"): ";
     cout.flush();
     QString I;
@@ -63,7 +72,6 @@ int main()
     K.encode(I);
     QString temp = K.decode();
     qDebug()<<endl<<"I: "<<temp<<endl;
-
 
 
     QMapIterator<int, GaluaRow> i(K.f->Field);
@@ -118,7 +126,4 @@ int main()
     }
 
     timer = QTime::currentTime();
-    cout<<timer.toString("hh:mm:ss.zzz")<<endl;
-
-    return 0;
-}
+	cout<<timer.toString("hh:mm:ss.zzz")<<endl;*/
