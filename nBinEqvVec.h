@@ -13,11 +13,15 @@ public:
 	~nBinEqvVec();
 
     QString ToStr();
-
+	
 	int A;
+	int n;
+	int w;
+
+	int* ab;
+	int* a;
+
     QString Ca;
-
-
 };
 
 #endif /* NBINEQVVEC_H */

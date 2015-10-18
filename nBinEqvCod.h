@@ -16,6 +16,8 @@ public:
 
 	QString getEqvVec(int A);
 	int getM() const;
+
+
 private:
 	int M;
 	int n;
@@ -23,7 +25,9 @@ private:
 	int q;
 	int qw;
 
-	nBinEqvVec calc_eVec(int A);
+	nBinEqvVec* code;
+
+	void calc_eVec(int i, nBinEqvVec& v);
 
 	int fact(const int& n);
 };

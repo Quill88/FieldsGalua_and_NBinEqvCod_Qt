@@ -13,7 +13,10 @@
 
 int main()
 {
-	nBinEqvCod K(3, 1, 4);
+	int n = 3; int w = 2; int q = 4;
+	nBinEqvCod K(n, w, q);
+
+	qDebug() << "A\tbin\tab\t\ta\tCa";
 	for (int i = 0; i < K.getM(); ++i)
 	{
 		qDebug() << K.getEqvVec(i);
