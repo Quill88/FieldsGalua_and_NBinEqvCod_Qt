@@ -13,16 +13,18 @@
 
 int main()
 {
-	int n = 3; int w = 2; int q = 4;
+	int n = 3; int w = 1; int q = 4;
 	nBinEqvCod K(n, w, q);
 
 	qDebug() << "A\tbin\tab\t\ta\tCa";
 	for (int i = 0; i < K.getM(); ++i)
 	{
-		qDebug() << K.getEqvVec(i);
+		qDebug() << K.getStringEqvVec(i);
 	}
 	
-
+	qDebug() << "\n030: " << ((K.getEqvVecByCa("030")) ? QString::number(K.getEqvVecByCa("030")->A) : "error");
+	qDebug() << "7: " << (K.getEqvVecByNum(7) ? K.getEqvVecByNum(7)->Ca : "error");
+	
     return 0;
 }
 

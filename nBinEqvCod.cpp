@@ -14,6 +14,7 @@ nBinEqvCod::nBinEqvCod(int n, int w, int q) : n(n), w(w), q(q)
 	for (int i = 0; i < M; ++i)
 	{
 		calc_eVec(i, code[i]);
+		mapNBEV.insert(code[i].Ca, &code[i]);
 	}
 }
 
@@ -30,7 +31,7 @@ int nBinEqvCod::getM() const
 	return M;
 }
 
-QString nBinEqvCod::getEqvVec(int A)
+QString nBinEqvCod::getStringEqvVec(int A)
 {
 	if (0 <= A && A < M)
 	{
@@ -94,4 +95,17 @@ void nBinEqvCod::calc_eVec(int A, nBinEqvVec& v)
 nBinEqvCod::~nBinEqvCod()
 {
 	if (code) delete[] code;
+}
+
+nBinEqvVec* nBinEqvCod::getEqvVecByNum(int A)
+{
+	if (A >= 0 && A < M) return &code[A];
+	else return nullptr;
+}
+
+
+nBinEqvVec* nBinEqvCod::getEqvVecByCa(QString Ca)
+{
+	if (mapNBEV.contains(Ca)) return mapNBEV[Ca];
+	else return nullptr;
 }

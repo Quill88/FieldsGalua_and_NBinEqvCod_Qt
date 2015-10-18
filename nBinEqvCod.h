@@ -4,6 +4,8 @@
 #include <qmath.h>
 #include <QDebug>
 #include <QString>
+#include <QMap>
+#include <QException>
 #include "nBinEqvVec.h"
 
 /*non–binary equivalent codes
@@ -14,9 +16,10 @@ public:
 	nBinEqvCod(int n, int w, int q);
 	~nBinEqvCod();
 
-	QString getEqvVec(int A);
+	QString getStringEqvVec(int A);
 	int getM() const;
-
+	nBinEqvVec* getEqvVecByNum(int A);
+	nBinEqvVec* getEqvVecByCa(QString Ca);
 
 private:
 	int M;
@@ -26,6 +29,7 @@ private:
 	int qw;
 
 	nBinEqvVec* code;
+	QMap<QString, nBinEqvVec*> mapNBEV;
 
 	void calc_eVec(int i, nBinEqvVec& v);
 
