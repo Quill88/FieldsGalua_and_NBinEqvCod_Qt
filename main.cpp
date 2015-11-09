@@ -15,11 +15,12 @@ int main()
 {
 	int n = 3; int w = 1; int q = 4;
 	nBinEqvCod K(n, w, q);
+	QTextStream cout(stdout);
 
-	qDebug() << "A\tbin\tab\t\ta\tCa";
+	cout << "A\tbin\tab\t\ta\tCa" << endl;
 	for (int i = 0; i < K.getM(); ++i)
 	{
-		qDebug() << K.getStringEqvVec(i);
+		cout << K.getStringEqvVec(i) << endl;
 	}
 	
 	qDebug() << "\n030: " << ((K.getEqvVecByCa("030")) ? QString::number(K.getEqvVecByCa("030")->A) : "error");

@@ -39,20 +39,23 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="galuafield.h">
+    <ClInclude Include="galuafield.h">
       <Filter>Header Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="galuarow.h">
+    </ClInclude>
+    <ClInclude Include="galuarow.h">
       <Filter>Header Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="koder.h">
+    </ClInclude>
+    <ClInclude Include="koder.h">
       <Filter>Header Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="nBinEqvCod.h">
+    </ClInclude>
+    <ClInclude Include="nBinEqvCod.h">
       <Filter>Header Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="nBinEqvVec.h">
+    </ClInclude>
+    <ClInclude Include="nBinEqvVec.h">
       <Filter>Header Files</Filter>
-    </CustomBuild>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
 </Project>
