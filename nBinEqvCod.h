@@ -7,6 +7,7 @@
 #include <QMap>
 #include <QException>
 #include "nBinEqvVec.h"
+#include <omp.h>
 
 /*nonЦbinary equivalent codes
 недвоичный равновесный код*/

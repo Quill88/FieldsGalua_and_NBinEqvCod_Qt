@@ -3,6 +3,8 @@
 
 nBinEqvCod::nBinEqvCod(int n, int w, int q) : n(n), w(w), q(q)
 {
+	omp_set_num_threads(4);
+
 	qw = qPow((q - 1), w);
 	M = qw * (fact(n)) / (fact(w)*fact(n - w));
 
@@ -11,6 +13,7 @@ nBinEqvCod::nBinEqvCod(int n, int w, int q) : n(n), w(w), q(q)
 	qDebug() << "Creating non_binary equivalent codes";
 	qDebug() << "n:" << n <<"\tw: " << w <<"\tq:"<<q <<"\tM: " <<M;
 
+	#pragma omp parallel for
 	for (int i = 0; i < M; ++i)
 	{
 		calc_eVec(i, code[i]);

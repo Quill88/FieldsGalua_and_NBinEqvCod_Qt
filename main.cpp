@@ -13,19 +13,29 @@
 
 int main()
 {
-	int n = 3; int w = 1; int q = 4;
-	nBinEqvCod K(n, w, q);
+	QTime timer;
 	QTextStream cout(stdout);
 
-	cout << "A\tbin\tab\t\ta\tCa" << endl;
-	for (int i = 0; i < K.getM(); ++i)
-	{
-		cout << K.getStringEqvVec(i) << endl;
-	}
+	int n = 3; int w = 2; int q = 9;
+
+	timer = QTime::currentTime();
+	cout << timer.toString("hh:mm:ss.zzz") << endl;
+
+	nBinEqvCod K(n, w, q);
+
+
+	//cout << "A\tbin\tab\t\ta\tCa" << endl;
+	//for (int i = 0; i < K.getM(); ++i)
+	//{
+	//	cout << K.getStringEqvVec(i) << endl;
+	//}
 	
-	qDebug() << "\n030: " << ((K.getEqvVecByCa("030")) ? QString::number(K.getEqvVecByCa("030")->A) : "error");
-	qDebug() << "7: " << (K.getEqvVecByNum(7) ? K.getEqvVecByNum(7)->Ca : "error");
+	qDebug() << "\n033: " << ((K.getEqvVecByCa("033")) ? QString::number(K.getEqvVecByCa("033")->A) : "error");
+	qDebug() << "77: " << (K.getEqvVecByNum(7) ? K.getEqvVecByNum(77)->Ca : "error");
 	
+	timer = QTime::currentTime();
+	cout << timer.toString("hh:mm:ss.zzz") << endl;
+
     return 0;
 }
 
