@@ -4,25 +4,36 @@
 
 #include <QString>
 #include <QDebug>
+#include <QBitArray>
+#include <QVector>
+#include <QVector3D>
 #include "galuafield.h"
 #include "galuarow.h"
+#include <QGlobal.h>
 
 class Koder
 {
 private:
     bool MakeField();
     bool MakeH();
-    bool MakeG();
+    bool MakeX();
+	bool MakeHx();
+
+	bool checkPoint(int x, int y, int z);
 
     int* CStar;
     int* S;
 
 public:
     int** H;
-    int** G;
+	int** Hx;
+    int** X;
+	int* P;
+	int* D;
 
+	QBitArray fixedMch;
     GaluaField *f;
-    int n, k, d, m, t;
+    int n, k, d, m, t, degF;
     Koder(int t, int k);
     void Init();
     ~Koder();

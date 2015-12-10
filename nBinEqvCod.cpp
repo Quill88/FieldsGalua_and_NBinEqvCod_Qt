@@ -3,9 +3,12 @@
 
 nBinEqvCod::nBinEqvCod(int n, int w, int q) : n(n), w(w), q(q)
 {
-	omp_set_num_threads(4);
-
+	omp_set_dynamic(1);
+	omp_set_num_threads(8);
+	
 	qw = qPow((q - 1), w);
+
+	/*иру 1*/
 	M = qw * (fact(n)) / (fact(w)*fact(n - w));
 
 	code = new nBinEqvVec[M];
@@ -49,13 +52,13 @@ void nBinEqvCod::calc_eVec(int A, nBinEqvVec& v)
 	v.n = n;
 	v.w = w;
 
+	/*иру 2*/
 	int Ab = A / qw;
 	int Ap = A % qw;
 
 	v.ab = new int[n];
 	v.a = new int[w];
-
-
+	
 	/*иру 3*/
 	int x = Ab;
 	int l = 0;
@@ -91,6 +94,7 @@ void nBinEqvCod::calc_eVec(int A, nBinEqvVec& v)
 			l++;
 		}
 		else v.Ca += "0";
+		v.Ca += " ";
 	}
 }
 
