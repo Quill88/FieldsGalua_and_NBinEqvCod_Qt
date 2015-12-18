@@ -1,7 +1,7 @@
-#include "galuafield.h"
-#include "galuarow.h"
+//#include "galuafield.h"
+//#include "galuarow.h"
 #include "koder.h"
-#include "nBinEqvCod.h"
+//#include "nBinEqvCod.h"
 #include <QTextStream>
 #include <QString>
 #include <QBitArray>
@@ -14,6 +14,7 @@
 int main()
 {
 	QTime timer;
+	timer = QTime::currentTime();
 
 	QFile file("out.txt");
 	if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
@@ -23,7 +24,7 @@ int main()
 	QTextStream fout(&file);
 	QTextStream cin(stdin);
 
-	int t = 5; int k = 10;
+	int t = 30; int k = 20;
 	Koder Kdr(t, k);
 
 	cout << "G_field" << endl;
@@ -31,27 +32,21 @@ int main()
 	cout << "(" << Kdr.n << ", " << Kdr.k << ", " << Kdr.d << ")" << endl << endl;
 
 
-	int n = 2; int w = 2; int q = Kdr.n;
-
-	timer = QTime::currentTime();
-
-	nBinEqvCod nBC(n, w, q);
 
 
-
-	QString I = "5 10 7 2 9 12 29 20 18 9";
+	QString I = "qwertyuiop[]{}asdfghjkl;':\"zxcvbnm,. 1234567890-=!@#$%^&*()_+`~";
 	Kdr.encode(I);
 
 	//-----------Запись в файл-----------------------------------------------------------
 
-	fout << "A\tbin\tab\t\ta\tCa" << endl;
-	for (int i = 0; i < nBC.getM(); ++i)
+	fout << "A\tbin         ab\t\ta\tCa" << endl;
+	for (int i = 0; i < Kdr.nBC->getM(); ++i)
 	{
-		fout << nBC.getStringEqvVec(i) << endl;
+		fout << Kdr.nBC->getStringEqvVec(i) << endl;
 	}
 	fout << endl;
 	QMapIterator<int, GaluaRow> i(Kdr.f->Field);
-	fout << "no\t" << "bin\t" << "L\t" << "poly\t" << endl;
+	fout << "no\t" << "bin     " << "L\t" << "poly\t" << endl;
 	while (i.hasNext())
 	{
 		i.next();

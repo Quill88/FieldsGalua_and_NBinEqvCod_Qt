@@ -24,6 +24,9 @@ Koder::Koder(int t, int k) : t(t), k(k)
 	Hx = nullptr;
 	CStar = nullptr;
 	S = nullptr;
+
+	nBC = nullptr;
+
 	Init();
 }
 
@@ -73,6 +76,7 @@ Koder::~Koder()
 		delete[] Hx;
 	}
 	delete f;
+	if (nBC) delete nBC;
 	if (CStar) delete[] CStar;
 	if (S) delete[] S;
 }
@@ -103,6 +107,10 @@ void Koder::Init()
 	fixedMch[3] = true;
 
 	degF = 4;
+
+
+	nBC = new nBinEqvCod(2, 1, (n + 1));
+
 
 	if (!MakeHdots())qDebug() << "error in building Hdots";
 	if (!MakeHpoly())qDebug() << "error in building Hpoly";
@@ -282,19 +290,21 @@ bool Koder::MakeX()
 	X = f->RandMatrixSxS(k);
 	inverseX = f->inverseMatrix(X, k);
 
-	qDebug() << endl << "X                                         inverseX"<< endl;
+	qDebug() << endl << "X                                                                                    inverseX"<< endl;
 	for (int i = 0; i < k; ++i)
 	{
 		QString s = "";
 		QString s2 = "";
 		for (int j = 0; j < k; j++)
 		{
-			if (X[i][j] >= 0 && X[i][j] <= 9) s += " ";
+			if (X[i][j] >= 0 && X[i][j] <= 9) s += "  ";
+			if (X[i][j] >= 10 && X[i][j] <= 99) s += " ";
 			s += QString::number(X[i][j]) + " ";
-			if (inverseX[i][j] >= 0 && inverseX[i][j] <= 9) s2 += " ";
+			if (inverseX[i][j] >= 0 && inverseX[i][j] <= 9) s2 += "  ";
+			if (inverseX[i][j] >= 10 && inverseX[i][j] <= 99) s2 += " ";
 			s2 += QString::number(inverseX[i][j]) + " ";
 		}
-		qDebug() << s <<"       "<<s2;
+		qDebug() << s <<"|"<<s2;
 	}
 	qDebug() << endl;
 
@@ -376,33 +386,45 @@ bool Koder::MakeHx()
 
 void Koder::encode(QString I)
 {
-	QStringList splited = I.split(" ");
-	if (splited.size() != k) qDebug() << splited.size() << " wrong count!";
+	//QStringList splited = I.split(" ");
+	//if (splited.size() != k) qDebug() << splited.size() << " wrong count!";
 
-	int* tempI = new int[k];
-	for (int i = 0; i < k; ++i)
-	{
-		tempI[i] = splited[i].toInt();
-	}
+	int* tempI = new int[n];
+	//for (int i = 0; i < k; ++i)
+	//{
+	//	tempI[i] = splited[i].toInt();
+	//}
 	
-	QString s = "";
-	for (int i = 0; i < k; ++i)
-		s += QString::number(tempI[i]) + " ";
-	s.remove(s.size() - 1, s.size() - 1);
-	qDebug() << endl << "I: " << s;
+	if (I.length() != (n/2)) qDebug() << "I wrong length!";
 
-	CStar = new int[n];
+	for (int i = 0, l = 1; i < I.length(); ++i)
+	{
+		ushort ch = I.at(i).toLatin1();
+		tempI[l] = nBC->getEqvVecByNum(static_cast<int>(ch))->CaInt[0];
+		tempI[l+1] = nBC->getEqvVecByNum(static_cast<int>(ch))->CaInt[1];
+		l += 2;
+	}
+	tempI[0]=0;
+
+	QString s = "";
 	for (int i = 0; i < n; ++i)
+		s += QString::number(tempI[i]) + " ";
+	s.remove(s.size() - 1, 1);
+	qDebug() << endl << "I: " << s;
+	
+	//Вместо транспонирования и умножения сразу умножаем в виде строка*строка
+	CStar = new int[k];
+	for (int i = 0; i < k; ++i)
 	{
 		CStar[i] = 0;
-		for (int j = 0; j < k; ++j)
-			CStar[i] = f->pl[CStar[i]][f->um[tempI[j]][Hx[j][i]]];
+		for (int j = 0; j < n; ++j)
+			CStar[i] = f->pl[CStar[i]][f->um[tempI[j]][Hx[i][j]]];
 	}
 
 	s = "";
-	for (int i = 0; i < n; ++i)
+	for (int i = 0; i < k; ++i)
 		s += QString::number(CStar[i]) + " ";
-	s.remove(s.size() - 1, s.size() - 1);
+	s.remove(s.size() - 1, 1);
 	
 	qDebug() << endl << "Encode arr: " << s;
 

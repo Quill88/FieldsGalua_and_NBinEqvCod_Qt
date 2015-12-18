@@ -11,6 +11,7 @@
 #include "galuafield.h"
 #include "galuarow.h"
 #include <QGlobal.h>
+#include "nBinEqvCod.h"
 
 class Koder
 {
@@ -36,11 +37,12 @@ public:
 	int** Hx;
 	int** X;
 	int** inverseX;
-	int* P;
-	int* D;
+	int*  P;
+	int*  D;
 
 	QBitArray fixedMch;
     GaluaField *f;
+	nBinEqvCod *nBC;
     int n, k, d, m, t, degF;
     Koder(int t, int k);
     void Init();

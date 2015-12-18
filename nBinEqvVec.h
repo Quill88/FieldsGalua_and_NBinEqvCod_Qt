@@ -20,6 +20,7 @@ public:
 
 	int* ab;
 	int* a;
+	int* CaInt;
 
     QString Ca;
 };

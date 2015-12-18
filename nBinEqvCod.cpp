@@ -58,6 +58,7 @@ void nBinEqvCod::calc_eVec(int A, nBinEqvVec& v)
 
 	v.ab = new int[n];
 	v.a = new int[w];
+	v.CaInt = new int[n];
 	
 	/*иру 3*/
 	int x = Ab;
@@ -91,9 +92,14 @@ void nBinEqvCod::calc_eVec(int A, nBinEqvVec& v)
 		if (v.ab[i])
 		{
 			v.Ca += QString::number(v.a[l]);
+			v.CaInt[i] = v.a[l];
 			l++;
 		}
-		else v.Ca += "0";
+		else
+		{
+			v.CaInt[i] = 0;
+			v.Ca += "0";
+		}
 		v.Ca += " ";
 	}
 }
