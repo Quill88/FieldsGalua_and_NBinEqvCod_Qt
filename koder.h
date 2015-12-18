@@ -3,6 +3,7 @@
 #define KODER_H
 
 #include <QString>
+#include <QStringList>
 #include <QDebug>
 #include <QBitArray>
 #include <QVector>
@@ -15,8 +16,12 @@ class Koder
 {
 private:
     bool MakeField();
-    bool MakeH();
-    bool MakeX();
+	bool MakeHdots();
+	bool MakeHpoly();
+	bool MakeH();
+	bool MakeX();
+	bool MakeP();
+	bool MakeD();
 	bool MakeHx();
 
 	bool checkPoint(int x, int y, int z);
@@ -26,8 +31,11 @@ private:
 
 public:
     int** H;
+	int** Hdots;
+	int** Hpoly;
 	int** Hx;
-    int** X;
+	int** X;
+	int** inverseX;
 	int* P;
 	int* D;
 

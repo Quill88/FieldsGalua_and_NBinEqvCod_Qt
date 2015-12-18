@@ -18,24 +18,31 @@ int main()
 	QFile file("out.txt");
 	if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
 		return 0;
-	
+
 	QTextStream cout(stdout);
 	QTextStream fout(&file);
 	QTextStream cin(stdin);
 
-	int t = 2; int k = 3;
+	int t = 5; int k = 10;
 	Koder Kdr(t, k);
 
 	cout << "G_field" << endl;
 	cout << "(n, k, d)" << endl;
 	cout << "(" << Kdr.n << ", " << Kdr.k << ", " << Kdr.d << ")" << endl << endl;
 
-	
-	int n = 3; int w = 2; int q = 10;
+
+	int n = 2; int w = 2; int q = Kdr.n;
 
 	timer = QTime::currentTime();
 
 	nBinEqvCod nBC(n, w, q);
+
+
+
+	QString I = "5 10 7 2 9 12 29 20 18 9";
+	Kdr.encode(I);
+
+	//-----------Запись в файл-----------------------------------------------------------
 
 	fout << "A\tbin\tab\t\ta\tCa" << endl;
 	for (int i = 0; i < nBC.getM(); ++i)
@@ -43,8 +50,6 @@ int main()
 		fout << nBC.getStringEqvVec(i) << endl;
 	}
 	fout << endl;
-
-	//-------------------------------------------------------------------------------
 	QMapIterator<int, GaluaRow> i(Kdr.f->Field);
 	fout << "no\t" << "bin\t" << "L\t" << "poly\t" << endl;
 	while (i.hasNext())
@@ -95,10 +100,10 @@ int main()
 		}
 		fout << endl;
 	}
-	//-------------------------------------------------------------------------------
+	//-----------------------------------------------------------------------------------
 
 	cout << endl << "Time spend: " << timer.msecsTo(QTime::currentTime()) << " msecs" << endl;
-		
+
 	return 0;
 }
 
@@ -212,5 +217,5 @@ int main()
 
 	timer = QTime::currentTime();
 	cout<<timer.toString("hh:mm:ss.zzz")<<endl;
-		
+
 	*/

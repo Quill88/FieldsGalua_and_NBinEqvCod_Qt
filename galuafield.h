@@ -7,6 +7,8 @@
 #include <QGlobal.h>
 #include <QTime>
 #include <qmath.h>
+#include <omp.h>
+#include <QDebug>
 #define GALUAFIELD_H
 
 
@@ -35,13 +37,12 @@ public:
 
     int powerNum(int num, int power);
     int randIntInField();
-    int** RandMatrixSize();
-    double** inverseMatrixSize(int** matrix);
-    void MatrixMult(int**, double);
+    int** RandMatrixSxS(int s);
+	int** inverseMatrix(int** matrix, int s);
+	int** MatrixMult(int **a, int m, int n, int** b, int n2, int q);
 
-    //QBitArray plus(const QBitArray &a1, const QBitArray &a2);
 private:
-    int m;\
+    int m;
     QMap<int,QString> GP;
     QMap<int,QBitArray> GPB;
 
