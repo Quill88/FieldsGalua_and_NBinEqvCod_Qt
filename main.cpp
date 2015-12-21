@@ -24,18 +24,18 @@ int main()
 	QTextStream fout(&file);
 	QTextStream cin(stdin);
 
-	int t = 30; int k = 20;
+	int t = 2; int k = 9;
 	Koder Kdr(t, k);
 
 	cout << "G_field" << endl;
 	cout << "(n, k, d)" << endl;
 	cout << "(" << Kdr.n << ", " << Kdr.k << ", " << Kdr.d << ")" << endl << endl;
+	
 
+	QString I = "qwer ty";
+	Kdr.encode(I, Kdr.Hx);
 
-
-
-	QString I = "qwertyuiop[]{}asdfghjkl;':\"zxcvbnm,. 1234567890-=!@#$%^&*()_+`~";
-	Kdr.encode(I);
+	cout<<endl<<"Message: "<<Kdr.decode(Kdr.Sx)<<endl;
 
 	//-----------Запись в файл-----------------------------------------------------------
 

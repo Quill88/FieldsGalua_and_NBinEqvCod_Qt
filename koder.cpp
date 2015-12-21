@@ -20,10 +20,11 @@ Koder::Koder(int t, int k) : t(t), k(k)
 	Hdots = nullptr;
 	Hpoly = nullptr;
 	P = nullptr;
+	inverseP = nullptr;
 	D = nullptr;
+	inverseD = nullptr;
 	Hx = nullptr;
-	CStar = nullptr;
-	S = nullptr;
+	Sx = nullptr;
 
 	nBC = nullptr;
 
@@ -65,8 +66,16 @@ Koder::~Koder()
 		delete[] X;
 		delete[] inverseX;
 	}
-	if (P) delete[] P;
-	if (D) delete[] D;
+	if (P)
+	{
+		delete[] P;
+		delete[] inverseP;
+	}
+	if (D)
+	{
+		delete[] D;
+		delete[] inverseD;
+	}
 	if (Hx)
 	{
 		for (int i = 0; i < k; ++i)
@@ -77,8 +86,7 @@ Koder::~Koder()
 	}
 	delete f;
 	if (nBC) delete nBC;
-	if (CStar) delete[] CStar;
-	if (S) delete[] S;
+	if (Sx) delete[] Sx;
 }
 
 bool Koder::MakeField()
@@ -108,8 +116,7 @@ void Koder::Init()
 
 	degF = 4;
 
-
-	nBC = new nBinEqvCod(2, 1, (n + 1));
+	nBC = new nBinEqvCod(2, 2, (n + 1));
 
 
 	if (!MakeHdots())qDebug() << "error in building Hdots";
@@ -236,15 +243,53 @@ bool Koder::checkPoint(int x, int y, int z)
 bool Koder::MakeP()
 {
 	P = new int[n];
+	inverseP = new int[n];
+
+	int** tempInverseP = nullptr;
 
 	for (int i = 0; i < n; ++i)
 		P[i] = f->randIntInField();
 
+	int** tempP = new int*[n];
+	for (int i = 0; i < n; ++i)
+	{
+		tempP[i] = new int[n];
+		tempP[i][i] = P[i];
+	}
+
+	for (int i = 0; i < n; ++i)
+	{
+		for (int j = 0; j < n; ++j)
+		{
+			if (i != j) tempP[i][j] = 0;
+		}
+	}
+
+	tempInverseP = f->inverseMatrix(tempP, n);
+
+	for (int i = 0; i < n; ++i)
+	{
+		inverseP[i] = tempInverseP[i][i];
+	}
+
 	qDebug() << endl << "P";
 	QString s = "";
+	QString s2 = "";
 	for (int i = 0; i < n; ++i)
+	{
 		s += QString::number(P[i]) + " ";
-	qDebug() << s;
+		s2 += QString::number(inverseP[i]) + " ";
+	}
+	s.remove(s.size() - 1, 1);
+	s2.remove(s2.size() - 1, 1);
+	qDebug() << s << endl << "inverseP" << endl << s2;
+
+	for (int i = 0; i < n; ++i)
+	{
+		delete[] tempP[i];
+		delete[] tempInverseP[i];
+	}
+	delete[] tempP; delete[] tempInverseP;
 
 	return true;
 }
@@ -252,17 +297,30 @@ bool Koder::MakeP()
 bool Koder::MakeD()
 {
 	D = new int[n];
+	inverseD = new int[n];
 
 	for (int i = 0; i < n; ++i)
 		D[i] = i + 1;
 
 	std::random_shuffle(D, D + n);
 
+	for (int i = 0; i < n; ++i)
+	{
+		inverseD[D[i] - 1] = i + 1;
+	}
+
 	qDebug() << endl << "D";
 	QString s = "";
+	QString s2 = "";
 	for (int i = 0; i < n; ++i)
+	{
 		s += QString::number(D[i]) + " ";
+		s2 += QString::number(inverseD[i]) + " ";
+	}
+	s.remove(s.size() - 1, 1);
+	s2.remove(s2.size() - 1, 1);
 	qDebug() << s;
+	qDebug() << "inverseD" << endl << s2;
 
 	return true;
 }
@@ -274,7 +332,7 @@ bool Koder::MakeH()
 	{
 		H[i] = new int[n];
 	}
-	
+
 	for (int i = 0; i < k; ++i)
 		for (int j = 0; j < n; ++j)
 		{
@@ -282,6 +340,20 @@ bool Koder::MakeH()
 			H[i][j] = f->um[H[i][j]][f->powerNum(Hdots[1][j], Hpoly[i][1])];
 			H[i][j] = f->um[H[i][j]][f->powerNum(Hdots[2][j], Hpoly[i][2])];
 		}
+
+	qDebug() << endl << "H" << endl;
+	for (int i = 0; i < k; ++i)
+	{
+		QString s = "";
+		for (int j = 0; j < n; j++)
+		{
+			if (H[i][j] >= 0 && H[i][j] <= 9) s += " ";
+			s += QString::number(H[i][j]) + " ";
+		}
+		qDebug() << s;
+	}
+	qDebug() << endl;
+
 	return true;
 }
 
@@ -290,7 +362,7 @@ bool Koder::MakeX()
 	X = f->RandMatrixSxS(k);
 	inverseX = f->inverseMatrix(X, k);
 
-	qDebug() << endl << "X                                                                                    inverseX"<< endl;
+	qDebug() << endl << "X                                        inverseX" << endl;
 	for (int i = 0; i < k; ++i)
 	{
 		QString s = "";
@@ -304,7 +376,7 @@ bool Koder::MakeX()
 			if (inverseX[i][j] >= 10 && inverseX[i][j] <= 99) s2 += " ";
 			s2 += QString::number(inverseX[i][j]) + " ";
 		}
-		qDebug() << s <<"|"<<s2;
+		qDebug() << s << "|" << s2;
 	}
 	qDebug() << endl;
 
@@ -315,18 +387,18 @@ bool Koder::MakeX()
 	}
 	tempX = f->MatrixMult(X, k, k, inverseX, k, k);
 
-	qDebug() << endl << "X cheking" << endl;
-	for (int i = 0; i < k; ++i)
-	{
-		QString s = "";
-		for (int j = 0; j < k; j++)
-		{
-			if (tempX[i][j] >= 0 && tempX[i][j] <= 9) s += " ";
-			s += QString::number(tempX[i][j]) + " ";
-		}
-		qDebug() << s;
-	}
-	qDebug() << endl;
+	//qDebug() << endl << "X cheking" << endl;
+	//for (int i = 0; i < k; ++i)
+	//{
+	//	QString s = "";
+	//	for (int j = 0; j < k; j++)
+	//	{
+	//		if (tempX[i][j] >= 0 && tempX[i][j] <= 9) s += " ";
+	//		s += QString::number(tempX[i][j]) + " ";
+	//	}
+	//	qDebug() << s;
+	//}
+	//qDebug() << endl;
 
 	if (tempX)
 	{
@@ -384,7 +456,7 @@ bool Koder::MakeHx()
 	return true;
 }
 
-void Koder::encode(QString I)
+void Koder::encode(QString I, int** Hx)
 {
 	//QStringList splited = I.split(" ");
 	//if (splited.size() != k) qDebug() << splited.size() << " wrong count!";
@@ -394,301 +466,227 @@ void Koder::encode(QString I)
 	//{
 	//	tempI[i] = splited[i].toInt();
 	//}
-	
-	if (I.length() != (n/2)) qDebug() << "I wrong length!";
 
-	for (int i = 0, l = 1; i < I.length(); ++i)
+	if (I.length() != (n / 2))
 	{
-		ushort ch = I.at(i).toLatin1();
-		tempI[l] = nBC->getEqvVecByNum(static_cast<int>(ch))->CaInt[0];
-		tempI[l+1] = nBC->getEqvVecByNum(static_cast<int>(ch))->CaInt[1];
-		l += 2;
+		qDebug() << "I wrong length!";
 	}
-	tempI[0]=0;
-
-	QString s = "";
-	for (int i = 0; i < n; ++i)
-		s += QString::number(tempI[i]) + " ";
-	s.remove(s.size() - 1, 1);
-	qDebug() << endl << "I: " << s;
-	
-	//Вместо транспонирования и умножения сразу умножаем в виде строка*строка
-	CStar = new int[k];
-	for (int i = 0; i < k; ++i)
+	else
 	{
-		CStar[i] = 0;
-		for (int j = 0; j < n; ++j)
-			CStar[i] = f->pl[CStar[i]][f->um[tempI[j]][Hx[i][j]]];
-	}
+		for (int i = 0, l = 1; i < I.length(); ++i)
+		{
+			ushort ch = I.at(i).toLatin1();
+			tempI[l] = nBC->getEqvVecByNum(static_cast<int>(ch))->CaInt[0];
+			tempI[l + 1] = nBC->getEqvVecByNum(static_cast<int>(ch))->CaInt[1];
+			l += 2;
+		}
+		tempI[0] = 0;
 
-	s = "";
-	for (int i = 0; i < k; ++i)
-		s += QString::number(CStar[i]) + " ";
-	s.remove(s.size() - 1, 1);
-	
-	qDebug() << endl << "Encode arr: " << s;
+		QString s = "";
+		for (int i = 0; i < n; ++i)
+			s += QString::number(tempI[i]) + " ";
+		s.remove(s.size() - 1, 1);
+		qDebug() << endl << "I: " << s;
+
+		//Вместо транспонирования и умножения сразу умножаем в виде строка*строка
+		Sx = new int[k];
+		for (int i = 0; i < k; ++i)
+		{
+			Sx[i] = 0;
+			for (int j = 0; j < n; ++j)
+				Sx[i] = f->pl[Sx[i]][f->um[tempI[j]][Hx[i][j]]];
+		}
+
+		s = "";
+		for (int i = 0; i < k; ++i)
+			s += QString::number(Sx[i]) + " ";
+		s.remove(s.size() - 1, 1);
+
+		qDebug() << endl << "Sx: " << s;
+
+	}
 
 	delete[] tempI;
 }
 
-QString Koder::decode()
+QString Koder::decode(int* Sx)
 {
-	//    int* lE = new int[n];
-	//    int h = n-k;
-	//    S = new int[h];
-	//    for(int i = 0; i < h; ++i)
-	//    {
-	//        int temp = 0;
-	//        for(int j = 0; j < n; ++j)
-	//        {
-	//            temp = f->pl[temp][f->um[CStar[j]][Hdots[i][j]]];
-	//            lE[j] = 0;
-	//        }
-	//        S[i] = temp;
-	//    }
-	//
-	//    QString temp = "";
-	//    for(int i = 0; i < h; ++i)
-	//    {
-	//        temp += QString::number(S[i]);
-	//    }
-	//    qDebug()<<"S: "<<temp;
-	//
-	//    int** A = new int*[t];
-	//    for(int i = 0; i < t; ++i)
-	//    {
-	//        A[i] = new int[t+1];
-	//    }
-	//
-	//    //Podgotovka
-	//    for(int i = 0; i < t; ++i)
-	//    {
-	//        for(int j = 0; j < t+1; ++j)
-	//        {
-	//            A[i][j] = S[i+j];
-	//        }
-	//    }
-	//    int tmp = 0;
-	//    //прямой проход
-	//    for(int i = 1; i < t; ++i)
-	//    {
-	//        if(A[i][0])
-	//        {
-	//            tmp = A[i][0];
-	//            for(int j = 0; j < t+1; ++j)
-	//                A[i][j] = f->pl[A[i][j]][tmp];
-	//        }
-	//    }
-	//    for(int i = 1; i < t; ++i)
-	//    {
-	//        for(int j = i+1; j < t; ++j)
-	//        {
-	//            if(A[i][i]!=0)
-	//            {
-	//                tmp = f->del(A[j][i], A[i][i]);
-	//                for(int itD = i; itD < t+1; ++itD)
-	//                {
-	//                    A[j][itD] = f->pl[A[j][itD]][f->um[A[i][itD]][tmp]];
-	//                }
-	//            }
-	//        }
-	//    }
-	//    //обратный проход
-	//    for(int i = t-1; i >= 0; --i)
-	//    {
-	//        for(int j = i-1; j >= 0; --j)
-	//        {
-	//            if(A[i][i]!=0)
-	//            {\
-	//                tmp = f->del(A[j][i], A[i][i]);
-	//                for(int itD = 0; itD < t+1; ++itD)
-	//                {
-	//                    A[j][itD] = f->pl[A[j][itD]][f->um[A[i][itD]][tmp]];
-	//                }
-	//            }
-	//        }
-	//    }
-	//    //результат
-	//    for(int i = 0; i < t; ++i)
-	//    {
-	//        A[i][t] = f->del(A[i][t], A[i][i]);
-	//        A[i][i] = f->del(A[i][i], A[i][i]);
-	//    }
-	//
-	//
-	//    qDebug()<<"A";
-	//    for(int i = 0; i < t; ++i)
-	//    {
-	//        temp="";
-	//        for(int j = 0; j < t+1; ++j)
-	//        {
-	//            temp+=QString::number(A[i][j])+" ";
-	//        }
-	//        qDebug()<<temp;
-	//    }
-	//
-	//    for(int i = 1; i < n+1; ++i)
-	//    {
-	//        int tempI = 0;
-	//        for(int j = t; j >= 0; --j)
-	//        {
-	//            int x = 1;
-	////            switch (j) {
-	////            case t:
-	////                x = f->powerNum(i, t);
-	////                break;
-	////            case 1:
-	////                x = f->um[i][A[1][t]];
-	////                break;
-	////            case 0:
-	////                x = A[0][t];
-	////                break;
-	////            default:
-	////                x = f->um[f->powerNum(i, j)][A[j][t]];
-	////                break;
-	////            }
-	//            if(j==t) x = f->powerNum(i, t);
-	//            else if(j==1) x = f->um[i][A[1][t]];
-	//            else if(j==0) x = A[0][t];
-	//            else x = f->um[f->powerNum(i, j)][A[j][t]];
-	//            tempI = f->pl[tempI][x];
-	//        }
-	//        if(tempI==0)
-	//        {
-	//            lE[i-1] = 1;
-	//        }
-	//    }
-	//
-	//    temp="lE: ";
-	//    for(int i = 0; i < n; ++i)
-	//    {
-	//        temp+=QString::number(lE[i])+" ";
-	//    }
-	//    qDebug()<<temp;
-	//
-	//    int** E = new int*[t];
-	//    for(int i = 0; i < t; ++i)
-	//    {
-	//        E[i] = new int[t+1];
-	//    }
-	//    //Podgotovka
-	//    for(int i = 0; i < t; ++i)
-	//    {
-	//        for(int j = 0; j < t; ++j)
-	//        {
-	//            E[i][j] = 1;
-	//        }
-	//        E[i][t] = S[i];
-	//    }
-	//    for(int i = 0, ij = 0; i<n; ++i)
-	//    {
-	//        if(lE[i])
-	//        {
-	//            for(int j = 0; j<t; ++j)
-	//            {
-	//                E[j][ij] = Hdots[j][i];
-	//            }
-	//            ++ij;
-	//        }
-	//    }
-	//    tmp = 0;
-	//    //прямой проход
-	//    for(int i = 0; i < t; ++i)
-	//    {
-	//        for(int j = i+1; j < t; ++j)
-	//        {
-	//            if(E[i][i]!=0)
-	//            {
-	//                tmp = f->del(E[j][i], E[i][i]);
-	//                for(int ij = 0; ij < t+1; ++ij)
-	//                    E[j][ij] = f->pl[E[j][ij]][f->um[E[i][ij]][tmp]];
-	//            }
-	//
-	//        }
-	//    }
-	//    for(int i = 1; i < t; ++i)
-	//    {
-	//        for(int j = i+1; j < t; ++j)
-	//        {
-	//            if(E[i][i]!=0)
-	//            {
-	//                tmp = f->del(E[j][i], E[i][i]);
-	//                for(int itD = i; itD < t+1; ++itD)
-	//                {
-	//                    E[j][itD] = f->pl[E[j][itD]][f->um[E[i][itD]][tmp]];
-	//                }
-	//            }
-	//        }
-	//    }
-	//    //обратный проход
-	//    for(int i = t-1; i >= 0; --i)
-	//    {
-	//        for(int j = i-1; j >= 0; --j)
-	//        {
-	//            if(E[i][i] != 0)
-	//            {
-	//                tmp = f->del(E[j][i], E[i][i]);
-	//                for(int itD = 0; itD < t+1; ++itD)
-	//                {
-	//                    E[j][itD] = f->pl[E[j][itD]][f->um[E[i][itD]][tmp]];
-	//                }
-	//            }
-	//        }
-	//    }
-	//    //результат
-	//    for(int i = 0; i < t; ++i)
-	//    {
-	//        E[i][t] = f->del(E[i][t], E[i][i]);
-	//        E[i][i] = f->del(E[i][i], E[i][i]);
-	//    }
-	//
-	//    qDebug()<<"E";
-	//    for(int i = 0; i < t; ++i)
-	//    {
-	//        temp="";
-	//        for(int j = 0; j < t+1; ++j)
-	//        {
-	//            temp+=QString::number(E[i][j])+" ";
-	//        }
-	//        qDebug()<<temp;
-	//    }
-	//
-	//    temp = "";
-	//    for(int i = 0, j = 0; i<n; ++i)
-	//    {
-	//        if(lE[i])
-	//        {
-	//            lE[i] = E[j][t];
-	//            ++j;
-	//        }
-	//        temp+=QString::number(lE[i])+" ";
-	//    }
-	//    qDebug()<<"e_rebuild: "<<temp;
-	//
-	//    int* enC = new int[n];
-	//    temp = "";
-	//    for(int i = 0; i < n; ++i)
-	//    {
-	//        enC[i] = f->pl[CStar[i]][lE[i]];
-	//        temp+=QString::number(enC[i])+" ";
-	//    }
-	//    qDebug()<<"decode C: "<<temp;
-	//
-	//    temp = "";
-	//    for(int i = 0; i < k; ++i)
-	//    {
-	//        temp+=QString::number(enC[i]);
-	//    }
-	//
-	//    for(int i = 0; i < t; ++i)
-	//    {
-	//        delete[] A[i];
-	//        delete[] E[i];
-	//    }
-	//    delete[] A;
-	//    delete[] E;
-	//    delete[] lE;
-	//    delete[] enC;
-	//
+	int* Cx = new int[n];
+	for (int i = 0; i < n; ++i)
+	{
+		if (i >= k) Cx[i] = 1;
+		else Cx[i] = 0;
+	}
+
+	int** tempArr = new int*[k];
+	for (int i = 0; i < k; ++i)
+	{
+		tempArr[i] = new int[k + 1];
+	}
+
+	for (int i = 0; i < k; ++i)
+	{
+		for (int j = 0; j < k; j++)
+		{
+			tempArr[i][j] = Hx[i][j];
+		}
+	}
+	for (int i = 0; i < k; ++i)
+	{
+		tempArr[i][k] = Sx[i];
+		for (int j = k; j < n; j++)
+		{
+			tempArr[i][k] = f->pl[tempArr[i][k]][Hx[i][j]];
+		}
+	}
+
+	/*qDebug() << endl << "tempArr" << endl;
+	for (int i = 0; i < k; ++i)
+	{
+	QString s = "";
+	for (int j = 0; j < (k+1); j++)
+	{
+	if (tempArr[i][j] >= 0 && tempArr[i][j] <= 9) s += " ";
+	s += QString::number(tempArr[i][j]) + " ";
+	}
+	qDebug() << s;
+	}
+	qDebug() << endl;*/
+
+	int* tempSx = gauss(tempArr, k, k + 1);
+
+	for (int i = 0; i < k; ++i)
+	{
+		Cx[i] = tempSx[i];
+	}
+	delete[] tempSx;
+
+
+	QString s = "";
+	for (int i = 0; i < n; ++i)
+		s += QString::number(Cx[i]) + " ";
+	s.remove(s.size() - 1, 1);
+	qDebug() << endl << "Cx: " << s;
+
+
+	int* tempCx = new int[n];
+	
+	for (int j = 0; j < n; ++j)
+	{
+		tempCx[j] = Cx[inverseD[j] - 1];
+	}
+
+	for (int j = 0; j < n; ++j)
+		tempCx[j] = f->um[tempCx[j]][inverseP[j]];
+
+
+	s = "";
+	for (int i = 0; i < n; ++i)
+		s += QString::number(tempCx[i]) + " ";
+	s.remove(s.size() - 1, 1);
+	qDebug() << endl << "Cx`: " << s;
+
+
+	tempSx = new int[k];
+	for (int i = 0; i < k; ++i)
+	{
+		tempSx[i] = 0;
+		for (int j = 0; j < n; ++j)
+			tempSx[i] = f->pl[tempSx[i]][f->um[tempCx[j]][H[i][j]]];
+	}
+
+	s = "";
+	for (int i = 0; i < k; ++i)
+		s += QString::number(tempSx[i]) + " ";
+	s.remove(s.size() - 1, 1);
+	qDebug() << endl << "Sx`: " << s;
+
+	for (int i = 0; i < k; ++i)
+	{
+		delete[] tempArr[i];
+	}
+	delete[] tempArr;
+	delete[] tempSx;
+	delete[] tempCx;
+	delete[] Cx;
+
 	return "dec";
+}
+
+int* Koder::gauss(int** Array, int row, int col)
+{
+	int** resultPH = new int*[row]; //создание массива для прямого хода
+	for (int i = 0; i < row; i++)
+	{
+		resultPH[i] = new int[col];
+	}
+	for (int i = 0; i < row; i++) //копирование данных, что бы не испортить входные данные
+		for (int j = 0; j < col; j++)
+			resultPH[i][j] = Array[i][j];
+	int* resultOH = new int[row]; //массив для результата обратного хода
+	for (int i = 0; i < row; i++)
+		resultOH[i] = 0;
+
+	//Прямой ход
+	for (int i = 0; i < row; i++)
+	{
+		int k = i; //выбор наибольшего элемента в столбце
+		for (int j = i; j < row; j++)
+		{
+			if (resultPH[j][i] > resultPH[k][i]) k = j;
+		}
+		if (k != i) //замена строк если это необходимо 
+		{
+			for (int j = i; j < col; j++)
+			{
+				int t = resultPH[i][j];
+				resultPH[i][j] = resultPH[k][j];
+				resultPH[k][j] = t;
+			}
+		}
+
+		for (int j = i + 1; j < row; j++) //вычитание текущей строки из всех нижних, умножив на соответствующий коэффициент
+		{
+			int c = f->del(resultPH[j][i], resultPH[i][i]);
+			for (k = i; k < col; k++)
+			{
+				resultPH[j][k] = f->pl[resultPH[j][k]][f->um[resultPH[i][k]][c]];
+			}
+		}
+	}
+
+	//Обратный ход
+	for (int i = row - 1; i >= 0; i--)
+	{
+		resultOH[i] = resultPH[i][col - 1];
+		for (int j = 0; j < col - 1; j++)
+		{
+			if (j != i)
+			{
+				resultOH[i] = f->pl[resultOH[i]][f->um[resultOH[j]][resultPH[i][j]]];
+			}
+		}
+		resultOH[i] = f->del(resultOH[i], resultPH[i][i]);
+	}
+
+	//qDebug() << endl << "result" << endl;
+	//for (int i = 0; i < row; ++i)
+	//{
+	//	QString s = "";
+	//	for (int j = 0; j < (row + 1); j++)
+	//	{
+	//		if (resultPH[i][j] >= 0 && resultPH[i][j] <= 9) s += " ";
+	//		s += QString::number(resultPH[i][j]) + " ";
+	//	}
+	//	qDebug() << s;
+	//}
+	//qDebug() << endl;
+
+	for (int i = 0; i < row; ++i)
+	{
+		delete[] resultPH[i];
+	}
+	delete[] resultPH;
+
+	return resultOH;
 }

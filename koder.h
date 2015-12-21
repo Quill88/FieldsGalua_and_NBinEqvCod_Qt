@@ -26,10 +26,8 @@ private:
 	bool MakeHx();
 
 	bool checkPoint(int x, int y, int z);
-
-    int* CStar;
-    int* S;
-
+	int* gauss(int** Array, int row, int col);
+	
 public:
     int** H;
 	int** Hdots;
@@ -38,7 +36,11 @@ public:
 	int** X;
 	int** inverseX;
 	int*  P;
+	int*  inverseP;
 	int*  D;
+	int*  inverseD;
+	
+	int* Sx;
 
 	QBitArray fixedMch;
     GaluaField *f;
@@ -48,8 +50,8 @@ public:
     void Init();
     ~Koder();
 
-    void encode(QString I);
-    QString decode();
+    void encode(QString I, int**);
+	QString decode(int*);
 
     GaluaRow getRow(int);
 };
