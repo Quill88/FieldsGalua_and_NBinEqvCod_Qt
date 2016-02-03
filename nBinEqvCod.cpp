@@ -3,25 +3,35 @@
 
 nBinEqvCod::nBinEqvCod(int n, int w, int q) : n(n), w(w), q(q)
 {
-	omp_set_dynamic(1);
-	omp_set_num_threads(8);
-	
-	qw = qPow((q - 1), w);
+	//omp_set_dynamic(1);
+	//omp_set_num_threads(8);
+	//
+	//qw = qPow((q - 1), w);
 
-	/*иру 1*/
-	M = qw * (fact(n)) / (fact(w)*fact(n - w));
+	///*иру 1*/
+	//M = qw * (fact(n)) / (fact(w)*fact(n - w));
 
-	code = new nBinEqvVec[M];
-	
+	//code = new nBinEqvVec[M];
+	//
+	code = nullptr;
+	M = 2027025000;
+
 	qDebug() << "Creating non_binary equivalent codes";
 	qDebug() << "n:" << n <<"\tw: " << w <<"\tq:"<<q <<"\tM: " <<M;
 
-	#pragma omp parallel for
-	for (int i = 0; i < M; ++i)
-	{
-		calc_eVec(i, code[i]);
-		mapNBEV.insert(code[i].Ca, &code[i]);
-	}
+	//#pragma omp parallel for
+	//for (int i = 0; i < M; ++i)
+	//{
+	//	calc_eVec(i, code[i]);
+	//	mapNBEV.insert(code[i].Ca, &code[i]);
+	//}
+	//--------------------------------------------------
+	//QTime midnight(0, 0, 0);
+	//qsrand(midnight.secsTo(QTime::currentTime()));
+	//code = new nBinEqvVec[3];
+	//calc_eVec(qrand() % M, code[0]);
+	//calc_eVec(qrand() % M, code[1]);
+	//calc_eVec(qrand() % M, code[2]);
 }
 
 int nBinEqvCod::fact(const int& n)
@@ -46,19 +56,19 @@ QString nBinEqvCod::getStringEqvVec(int A)
 	else return "A not in 0<=A<M";
 }
 
-void nBinEqvCod::calc_eVec(int A, nBinEqvVec& v)
+void nBinEqvCod::calc_eVec(int A, nBinEqvVec* v)
 {
-	v.A = A;
-	v.n = n;
-	v.w = w;
+	v->A = A;
+	v->n = n;
+	v->w = w;
 
 	/*иру 2*/
 	int Ab = A / qw;
 	int Ap = A % qw;
 
-	v.ab = new int[n];
-	v.a = new int[w];
-	v.CaInt = new int[n];
+	v->ab = new int[n];
+	v->a = new int[w];
+	v->CaInt = new int[n];
 	
 	/*иру 3*/
 	int x = Ab;
@@ -67,10 +77,10 @@ void nBinEqvCod::calc_eVec(int A, nBinEqvVec& v)
 	for (int i = 0; i < n; ++i)
 	{
 		int b = fact(n - i - 1) / (fact(w - l)*fact((n - i - 1) - (w - l)));
-		if (b > x) v.ab[n - i - 1] = 0;
+		if (b > x) v->ab[n - i - 1] = 0;
 		else
 		{
-			v.ab[n - i - 1] = 1;
+			v->ab[n - i - 1] = 1;
 			x -= b;
 			l++;
 		}
@@ -81,7 +91,7 @@ void nBinEqvCod::calc_eVec(int A, nBinEqvVec& v)
 	l = 0;
 	while (l < w)
 	{
-		v.a[l] = (x % (q - 1)) + 1;
+		v->a[l] = (x % (q - 1)) + 1;
 		x = x / (q - 1);
 		l++;
 	}
@@ -89,18 +99,18 @@ void nBinEqvCod::calc_eVec(int A, nBinEqvVec& v)
 	/*иру 5*/
 	for (int i = 0, l = 0; i < n; ++i)
 	{
-		if (v.ab[i])
+		if (v->ab[i])
 		{
-			v.Ca += QString::number(v.a[l]);
-			v.CaInt[i] = v.a[l];
+			v->Ca += QString::number(v->a[l]);
+			v->CaInt[i] = v->a[l];
 			l++;
 		}
 		else
 		{
-			v.CaInt[i] = 0;
-			v.Ca += "0";
+			v->CaInt[i] = 0;
+			v->Ca += "0";
 		}
-		v.Ca += " ";
+		v->Ca += " ";
 	}
 }
 
@@ -112,7 +122,12 @@ nBinEqvCod::~nBinEqvCod()
 
 nBinEqvVec* nBinEqvCod::getEqvVecByNum(int A)
 {
-	if (A >= 0 && A < M) return &code[A];
+	if (A >= 0 && A < M)
+	{
+		nBinEqvVec* v = new nBinEqvVec();
+		calc_eVec(A, v);
+		return v;
+	}
 	else return nullptr;
 }
 

@@ -8,6 +8,8 @@
 #include <QException>
 #include "nBinEqvVec.h"
 #include <omp.h>
+#include <QGlobal.h>
+#include <QTime>
 
 /*nonЦbinary equivalent codes
 недвоичный равновесный код*/
@@ -21,6 +23,8 @@ public:
 	int getM() const;
 	nBinEqvVec* getEqvVecByNum(int A);
 	nBinEqvVec* getEqvVecByCa(QString Ca);
+	
+	void calc_eVec(int i, nBinEqvVec* v);
 
 private:
 	int M;
@@ -31,8 +35,6 @@ private:
 
 	nBinEqvVec* code;
 	QMap<QString, nBinEqvVec*> mapNBEV;
-
-	void calc_eVec(int i, nBinEqvVec& v);
 
 	int fact(const int& n);
 };

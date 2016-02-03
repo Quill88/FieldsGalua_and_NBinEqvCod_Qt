@@ -231,7 +231,7 @@ void GaluaField::FillOper()
 
 int** GaluaField::RandMatrixSxS(int s)
 {
-	QTime midnight;
+	QTime midnight(0,0,0);
 	qsrand(midnight.secsTo(QTime::currentTime()));
 	int** a = new int*[s];
 	for (int i = 0; i < s; ++i)
@@ -300,9 +300,7 @@ int** GaluaField::inverseMatrix(int **matrix, int s)
 				int temp = um[tmp[i][k]][tmp2[k][j]];
 				int tepm2 = tmp[i][j];
 				tmp[i][j] = pl[tepm2][temp];
-
 			}
-			//tmp[i][j] = tmp[i][j] - tmp[i][k] * tmp2[k][j];
 		}
 	}
 
@@ -314,7 +312,6 @@ int** GaluaField::inverseMatrix(int **matrix, int s)
 			S = 0;
 			for (i = k + 1; i < s; i++)
 				S = pl[S][um[tmp2[k][i]][res[i][j1]]];
-			//S += tmp2[k][i] * res[i][j1];
 			res[k][j1] = pl[tmp2[k][j1 + s]][S];
 		}
 	for (i = 0; i < s; ++i)

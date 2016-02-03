@@ -19,7 +19,7 @@ nBinEqvVec::~nBinEqvVec()
 
 QString nBinEqvVec::ToStr()
 {
-	QString s = QString::number(A) + "\t";
+	QString s = QString::number(A) + "   ";
 
 	if (A >= 64 && A <= 127) s += "0";
 	else if (A >= 32 && A <= 63) s += "00";
@@ -29,14 +29,14 @@ QString nBinEqvVec::ToStr()
 	else if (A >= 2 && A <= 3) s += "000000";
 	else if (A >= 0 && A <= 1) s += "0000000";
 
-	s += QString::number(A, 2) + "\t{";
+	s += QString::number(A, 2) + "  {";
 
 	for (int i = 0; i < n; ++i)
 	{
 		s += QString::number(ab[i]); 
 		if (i != (n - 1)) s += ", ";
 	}
-	s += "}\t{";
+	s += "} {";
 
 	for (int i = 0; i < w; ++i)
 	{
@@ -44,7 +44,7 @@ QString nBinEqvVec::ToStr()
 		if (i != (w - 1)) s += ", ";
 	}
 
-	s += "}\t";
+	s += "}  ";
 	s += Ca;
 
     return s;

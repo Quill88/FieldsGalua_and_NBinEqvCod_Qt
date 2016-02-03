@@ -45,10 +45,12 @@ public:
 	QBitArray fixedMch;
     GaluaField *f;
 	nBinEqvCod *nBC;
-    int n, k, d, m, t, degF;
+    int n, k, d, m, t, t2, degF;
     Koder(int t, int k);
     void Init();
     ~Koder();
+
+	void test();
 
     void encode(QString I, int**);
 	QString decode(int*);
