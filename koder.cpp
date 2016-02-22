@@ -342,13 +342,22 @@ bool Koder::MakeH()
 		H[i] = new int[n];
 	}
 
-	for (int i = 0; i < t2; ++i)
-		for (int j = 0; j < n; ++j)
-		{
-			H[i][j] = f->powerNum(Hdots[0][j], Hpoly[i][0]);
-			H[i][j] = f->um[H[i][j]][f->powerNum(Hdots[1][j], Hpoly[i][1])];
-			H[i][j] = f->um[H[i][j]][f->powerNum(Hdots[2][j], Hpoly[i][2])];
-		}
+	//for (int i = 0; i < t2; ++i)
+	//	for (int j = 0; j < n; ++j)
+	//	{
+	//		H[i][j] = f->powerNum(Hdots[0][j], Hpoly[i][0]);
+	//		H[i][j] = f->um[H[i][j]][f->powerNum(Hdots[1][j], Hpoly[i][1])];
+	//		H[i][j] = f->um[H[i][j]][f->powerNum(Hdots[2][j], Hpoly[i][2])];
+	//	}
+
+	H[0][0] = 0; H[0][1] = 0; H[0][2] = 3; H[0][3] = 0; H[0][4] = 2; 
+	H[0][5] = 0; H[0][6] = 2;
+	H[1][0] = 2; H[1][1] = 0; H[1][2] = 2; H[1][3] = 0; H[1][4] = 2;
+	H[1][5] = 0; H[1][6] = 1;
+	H[2][0] = 0; H[2][1] = 1; H[2][2] = 1; H[2][3] = 3; H[2][4] = 3;
+	H[2][5] = 2; H[2][6] = 2;
+	H[3][0] = 3; H[3][1] = 0; H[3][2] = 3; H[3][3] = 0; H[3][4] = 3;
+	H[3][5] = 0; H[3][6] = 1;
 
 	qDebug() << endl << "H" << endl;
 	for (int i = 0; i < t2; ++i)
@@ -433,32 +442,46 @@ bool Koder::MakeX()
 
 bool Koder::MakeHx()
 {
-	Hx = f->MatrixMult(X, t2, t2, H, t2, n);
-
-	for (int i = 0; i < t2; ++i)
-		for (int j = 0; j < n; ++j)
-			Hx[i][j] = f->um[Hx[i][j]][P[j]];
-
-	int** tempHx = new int*[t2];
+	Hx = new int *[t2];
 	for (int i = 0; i < t2; ++i)
 	{
-		tempHx[i] = new int[n];
+		Hx[i] = new int[n];
 	}
 
 	for (int i = 0; i < t2; ++i)
+	{
 		for (int j = 0; j < n; ++j)
 		{
-			tempHx[i][j] = Hx[i][D[j] - 1];
+			Hx[i][j] = H[i][j];
 		}
-
-	for (int i = 0; i < t2; ++i)
-	{
-		delete[] Hx[i];
 	}
-	delete[] Hx;
 
-	Hx = tempHx;
-	tempHx = nullptr;
+	//Hx = f->MatrixMult(X, t2, t2, H, t2, n);
+
+	//for (int i = 0; i < t2; ++i)
+	//	for (int j = 0; j < n; ++j)
+	//		Hx[i][j] = f->um[Hx[i][j]][P[j]];
+
+	//int** tempHx = new int*[t2];
+	//for (int i = 0; i < t2; ++i)
+	//{
+	//	tempHx[i] = new int[n];
+	//}
+
+	//for (int i = 0; i < t2; ++i)
+	//	for (int j = 0; j < n; ++j)
+	//	{
+	//		tempHx[i][j] = Hx[i][D[j] - 1];
+	//	}
+
+	//for (int i = 0; i < t2; ++i)
+	//{
+	//	delete[] Hx[i];
+	//}
+	//delete[] Hx;
+
+	//Hx = tempHx;
+	//tempHx = nullptr;
 
 	qDebug() << endl << "Hx" << endl;
 	for (int i = 0; i < t2; ++i)
@@ -589,12 +612,14 @@ QString Koder::decode(int* Sx)
 	int* tempCx = new int[n];
 
 	for (int j = 0; j < n; ++j)
-	{
-		tempCx[j] = Cx[inverseD[j] - 1];
-	}
+		tempCx[j] = Cx[j];
 
-	for (int j = 0; j < n; ++j)
-		tempCx[j] = f->um[tempCx[j]][inverseP[j]];
+	//for (int j = 0; j < n; ++j)
+	//	tempCx[j] = Cx[inverseD[j] - 1];
+
+
+	//for (int j = 0; j < n; ++j)
+	//	tempCx[j] = f->um[tempCx[j]][inverseP[j]];
 
 
 	s = "";
@@ -602,8 +627,7 @@ QString Koder::decode(int* Sx)
 		s += QString::number(tempCx[i]) + " ";
 	s.remove(s.size() - 1, 1);
 	qDebug() << endl << "Cx`: " << s;
-
-
+	
 	tempSx = new int[t2];
 	for (int i = 0; i < t2; ++i)
 	{
@@ -681,7 +705,7 @@ QString Koder::decode(int* Sx)
 	delete[] tempE;
 	delete[] Cx;
 
-	return "dec";
+	return " ";
 }
 
 int* Koder::gauss(int** Array, int row, int col)
