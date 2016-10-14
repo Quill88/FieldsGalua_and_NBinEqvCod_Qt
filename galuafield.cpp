@@ -5,6 +5,9 @@ GaluaField::GaluaField(int &m)
 	this->m = m;
 	this->size = static_cast<int>(pow(2, static_cast<double>(m)));
 
+	pl = nullptr;
+	um = nullptr;
+
 	QBitArray a(3);
 	switch (m) {
 	case (2) :
@@ -327,8 +330,8 @@ int** GaluaField::inverseMatrix(int **matrix, int s)
 
 int** GaluaField::MatrixMult(int **a, int m, int n, int** b, int n2, int q)
 {
-	omp_set_dynamic(1);
-	omp_set_num_threads(8);
+    omp_set_dynamic(1);
+    omp_set_num_threads(8);
 
 	if (n != n2) return nullptr;
 
@@ -338,38 +341,39 @@ int** GaluaField::MatrixMult(int **a, int m, int n, int** b, int n2, int q)
 		res[i] = new int[q];
 	}
 
-#pragma omp parallel for
-	for (int i = 0; i < m*q; ++i) {
-		int row = i / q;
-		int temp = 0;
-		for (int inner = 0; inner < n; ++inner) {
-			temp = pl[temp][um[a[row][inner]][b[inner][i%q]]];
-		}
-		res[row][i%q] = temp;
-	}
-	//for (int row = 0; row < m; ++row) {
-	//	for (int col = 0; col < q; ++col) {
-	//		int temp = 0;
-	//		for (int inner = 0; inner < n; ++inner) {
-	//			temp = pl[temp][um[a[row][inner]][b[inner][col]]];
-	//		}
-	//		res[row][col] = temp;
-	//	}
-	//}
+//#pragma omp parallel for
+//    for (int i = 0; i < m*q; ++i) {
+//        int row = i / q;
+//        int temp = 0;
+//        for (int inner = 0; inner < n; ++inner) {
+//            temp = pl[temp][um[a[row][inner]][b[inner][i%q]]];
+//        }
+//        res[row][i%q] = temp;
+//    }
+    for (int row = 0; row < m; ++row) {
+        for (int col = 0; col < q; ++col) {
+            int temp = 0;
+            for (int inner = 0; inner < n; ++inner)
+                temp = pl[temp][um[a[row][inner]][b[inner][col]]];
+            res[row][col] = temp;
+        }
+    }
 
 	return res;
 }
 
 GaluaField::~GaluaField()
 {
-	if (pl && um)
+	if (pl)
 	{
 		for (int i = 0; i < size; ++i)
-		{
 			delete[] pl[i];
-			delete[] um[i];
-		}
 		delete[] pl;
+	}
+	if (um)
+	{
+		for (int i = 0; i < size; ++i)
+			delete[] um[i];
 		delete[] um;
 	}
 }

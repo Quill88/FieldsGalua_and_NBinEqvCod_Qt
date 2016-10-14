@@ -1,25 +1,32 @@
 TEMPLATE = app
 TARGET = FieldsGaluaQt
-DESTDIR = ./debug
+
 QT += core
-CONFIG += debug console
+CONFIG += debug console c++11
+CONFIG -= app_bundle
 DEFINES += _CONSOLE
-INCLUDEPATH += . \
-    ./debug \
-    $(QTDIR)/mkspecs/win32-msvc2013
-DEPENDPATH += .
-MOC_DIR += ./GeneratedFiles/debug
-OBJECTS_DIR += debug
-UI_DIR += ./GeneratedFiles
-RCC_DIR += ./GeneratedFiles
-HEADERS += ./galuafield.h \
-    ./galuarow.h \
-    ./koder.h \
-    ./nBinEqvCod.h \
-    ./nBinEqvVec.h
-SOURCES += ./galuafield.cpp \
-    ./galuarow.cpp \
-    ./koder.cpp \
-    ./main.cpp \
-    ./nBinEqvCod.cpp \
-    ./nBinEqvVec.cpp
+TEMPLATE = app
+INCLUDEPATH += $$PWD \
+	$$PWD/gmp/include \
+    $$PWD/debug
+QMAKE_CXXFLAGS += -fopenmp
+LIBS += -fopenmp
+LIBS += -L$$PWD/gmp/lib/ -lgmpxx -lgmp
+DEPENDPATH += $$PWD/gmp/include
+MOC_DIR += $$PWD/GeneratedFiles/debug
+OBJECTS_DIR += $$PWD/debug
+UI_DIR += $$PWD/GeneratedFiles
+RCC_DIR += $$PWD/GeneratedFiles
+
+HEADERS += $$PWD/galuafield.h \
+    $$PWD/galuarow.h \
+    $$PWD/koder.h \
+    $$PWD/nBinEqvCod.h \
+    $$PWD/nBinEqvVec.h \
+    $$PWD/smart_fact.h
+SOURCES += $$PWD/galuafield.cpp \
+    $$PWD/galuarow.cpp \
+    $$PWD/koder.cpp \
+    $$PWD/main.cpp \
+    $$PWD/nBinEqvCod.cpp \
+    $$PWD/nBinEqvVec.cpp

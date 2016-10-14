@@ -6,11 +6,11 @@
 #include <QStringList>
 #include <QDebug>
 #include <QBitArray>
-#include <QVector>
 #include <QVector3D>
+#include <QVector>
 #include "galuafield.h"
 #include "galuarow.h"
-#include <QGlobal.h>
+#include <QtGlobal>
 #include "nBinEqvCod.h"
 
 class Koder
@@ -50,7 +50,9 @@ public:
     void Init();
     ~Koder();
 
-	void test();
+	void Fact_test();
+	void test_encode_nonBEC();
+	void test(int,int,int);
 
     void encode(QString I, int**);
 	QString decode(int*);

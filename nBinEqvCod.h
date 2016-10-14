@@ -8,35 +8,42 @@
 #include <QException>
 #include "nBinEqvVec.h"
 #include <omp.h>
-#include <QGlobal.h>
+#include <QtGlobal>
 #include <QTime>
+#include "smart_fact.h"
 
-/*non–binary equivalent codes
-недвоичный равновесный код*/
+/*nonbinary equivalent codes
+РЅРµРґРІРѕРёС‡РЅС‹Р№ СЂР°РІРЅРѕРІРµСЃРЅС‹Р№ РєРѕРґ*/
 class nBinEqvCod
 {
 public:
 	nBinEqvCod(int n, int w, int q);
 	~nBinEqvCod();
 
-	QString getStringEqvVec(int A);
-	int getM() const;
-	nBinEqvVec* getEqvVecByNum(int A);
-	nBinEqvVec* getEqvVecByCa(QString Ca);
-	
-	void calc_eVec(int i, nBinEqvVec* v);
+	QString getStringEqvVec(mpz_class);
+	mpz_class getM() const;
+	//long get_long_M() const;
+	nBinEqvVec* getEqvVecByNum(mpz_class);
+	nBinEqvVec* getEqvVecByCa(QString);
+
+	void test();
 
 private:
-	int M;
-	int n;
-	int w;
-	int q;
-	int qw;
+	mpz_class M;
+    int n;
+    int w;
+    int q;
+	mpz_class qw;
 
 	nBinEqvVec* code;
 	QMap<QString, nBinEqvVec*> mapNBEV;
 
-	int fact(const int& n);
+	//int from_bigint_to_int(Bigint) const;
+
+	void calc_eVec(mpz_class, nBinEqvVec*);
+	void calc_eVec_byStr(nBinEqvVec*);
+
+    mpz_class comb(long, long);
 };
 
 #endif /* NBINEQVCOD_H */

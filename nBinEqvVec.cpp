@@ -1,7 +1,7 @@
 #include "nBinEqvVec.h"
 
 
-nBinEqvVec::nBinEqvVec()
+nBinEqvVec::nBinEqvVec() : Ab(0), Ap(0)
 {
 	Ca = "";
 	ab = nullptr;
@@ -9,6 +9,12 @@ nBinEqvVec::nBinEqvVec()
 	CaInt = nullptr;
 }
 
+nBinEqvVec::nBinEqvVec(QString Ca) : Ca(Ca), Ab(0), Ap(0)
+{
+	ab = nullptr;
+	a = nullptr;
+	CaInt = nullptr;
+}
 
 nBinEqvVec::~nBinEqvVec()
 {
@@ -19,29 +25,26 @@ nBinEqvVec::~nBinEqvVec()
 
 QString nBinEqvVec::ToStr()
 {
-	QString s = QString::number(A) + "   ";
-
-	if (A >= 64 && A <= 127) s += "0";
-	else if (A >= 32 && A <= 63) s += "00";
-	else if (A >= 16 && A <= 31) s += "000";
-	else if (A >= 8 && A <= 15) s += "0000";
-	else if (A >= 4 && A <= 7) s += "00000";
-	else if (A >= 2 && A <= 3) s += "000000";
-	else if (A >= 0 && A <= 1) s += "0000000";
-
-	s += QString::number(A, 2) + "  {";
+    QString s = A.get_str().c_str();
+    s += "   ";
+    s += A.get_str(2).c_str();
+    s += "  {";
+    s += Ab.get_str().c_str();
+    s += "} {";
 
 	for (int i = 0; i < n; ++i)
 	{
 		s += QString::number(ab[i]); 
-		if (i != (n - 1)) s += ", ";
+		if (i != (n - 1)) s += ",";
 	}
+
 	s += "} {";
+	s += Ap.get_str().c_str(); s += "} {";
 
 	for (int i = 0; i < w; ++i)
 	{
 		s += QString::number(a[i]);
-		if (i != (w - 1)) s += ", ";
+		if (i != (w - 1)) s += ",";
 	}
 
 	s += "}  ";

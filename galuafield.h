@@ -4,7 +4,7 @@
 #include <QMap>
 #include <QString>
 #include <QBitArray>
-#include <QGlobal.h>
+#include <QtGlobal>
 #include <QTime>
 #include <qmath.h>
 #include <omp.h>

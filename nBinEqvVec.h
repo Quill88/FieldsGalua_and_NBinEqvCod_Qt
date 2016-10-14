@@ -2,27 +2,31 @@
 #ifndef NBINEQVVEC_H
 #define NBINEQVVEC_H
 
+#include <gmpxx.h>
 #include <QString>
 
-/*non–binary equivalent vector
-недвоичный равновесный вектор*/
+/*nonР¦binary equivalent vector
+РЅРµРґРІРѕРёС‡РЅС‹Р№ СЂР°РІРЅРѕРІРµСЃРЅС‹Р№ РІРµРєС‚РѕСЂ*/
 class nBinEqvVec
 {
 public:
 	nBinEqvVec();
+	nBinEqvVec(QString);
 	~nBinEqvVec();
 
     QString ToStr();
 	
-	int A;
+	mpz_class A;
 	int n;
 	int w;
 
-	int* ab;
-	int* a;
-	int* CaInt;
-
     QString Ca;
+
+	mpz_class Ab;
+	mpz_class Ap;
+    int* ab;
+    int* a;
+    int* CaInt;
 };
 
 #endif /* NBINEQVVEC_H */

@@ -8,46 +8,71 @@
 #include <QMap>
 #include <QMapIterator>
 #include <QFile>
+#include <QFileInfo>
 #include <QTime>
 #include <QDebug>
+
+#include <gmpxx.h>
 
 int main()
 {
 	QTime timer;
 	timer = QTime::currentTime();
 
-	QFile file("out.txt");
-	if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
-		return 0;
+    QTextStream cout(stdout);
+//    QTextStream cin(stdin);
 
-	QTextStream cout(stdout);
-	QTextStream fout(&file);
-	QTextStream cin(stdin);
-
-	int t = 2; int k = 3;
+    int t = 4; int k = 6;
+    //int t = 20; int k = 15;
 	Koder Kdr(t, k);
 
-	cout << "G_field" << endl;
+	cout << endl << "G_field" << endl;
 	cout << "(n, k, d)" << endl;
-	cout << "(" << Kdr.n << ", " << Kdr.k << ", " << Kdr.d << ")" << endl << endl;
+    cout << "(" << Kdr.n << ", " << Kdr.k << ", " << Kdr.d << ")" << endl;
+
+//--------------------------Testing encode NBEC--------------------------------
+//    Kdr.test_encode_nonBEC();
+
+//------------------------------koder test-------------------------------------
+//    Kdr.test(3, 2, 3);
+
+//-------------------------------gmp test--------------------------------------
+//    Kdr.Fact_test();
+
+
+	//QString I = "AbC";
+	//Kdr.encode(I, Kdr.Hx);
+
+	//cout<<endl<<"Message: "<<Kdr.decode(Kdr.Sx)<<endl;
 	
+    //-----------Ð—Ð°Ð¿Ð¸ÑÑŒ Ð² Ñ„Ð°Ð¹Ð»-------------------------------------------------
 
-	QString I = "AbC";
-	Kdr.encode(I, Kdr.Hx);
+//	QFile file2("nBinEqvCod.txt");
+//	if (!file2.open(QIODevice::WriteOnly | QIODevice::Text))
+//		return 0;
+//	QTextStream fout3(&file2);
+//	fout3 << "A\tbin       Ab\t[ab]\t\tAp\t[a]\tCa" << endl;
+//	for (int i = 0; i < Kdr.nBC->getM(); ++i)
+//	{
+//		nBinEqvVec* v = Kdr.nBC->getEqvVecByNum(i);
+//		fout3 << v->ToStr() << endl;
+//		delete v;
+//	}
+//	fout3 << endl << endl << endl;
+//	fout3 << "A\tbin       Ab\t[ab]\t\tAp\t[a]\tCa" << endl;
+//	for (int i = 0; i < Kdr2.nBC->getM(); ++i)
+//	{
+//		nBinEqvVec* v = Kdr2.nBC->getEqvVecByNumFromCode(i);
+//		fout3 << v->ToStr() << endl;
+//	}
+//	file2.close();
 
-	cout<<endl<<"Message: "<<Kdr.decode(Kdr.Sx)<<endl;
+    QFile file("out.txt");
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
+        return 0;
 
+    QTextStream fout(&file);
 
-	//Kdr.test();
-
-	//-----------Çàïèñü â ôàéë-----------------------------------------------------------
-	/*
-	fout << "A\tbin         ab\t\ta\tCa" << endl;
-	for (int i = 0; i < Kdr.nBC->getM(); ++i)
-	{
-		fout << Kdr.nBC->getStringEqvVec(i) << endl;
-	}
-	fout << endl;*/
 	QMapIterator<int, GaluaRow> i(Kdr.f->Field);
 	fout << "no\t" << "bin     " << "L\t" << "poly\t" << endl;
 	while (i.hasNext())
@@ -97,10 +122,15 @@ int main()
 			fout << QString::number(Kdr.f->del(i, j)) << "\t";
 		}
 		fout << endl;
-	}
-	//-----------------------------------------------------------------------------------
-	
-	cout << endl << "Time spend: " << timer.msecsTo(QTime::currentTime()) << " msecs" << endl;
+    }
+    //-------------------------------------------------------------------------
 
+    cout << endl << "Time spend: " << timer.msecsTo(QTime::currentTime())
+         << " msecs" << endl;
+
+    cout << endl << "Output file: " << QFileInfo(file).absoluteFilePath()
+         << endl;
+
+	file.close();
 	return 0;
 }
