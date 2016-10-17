@@ -1063,6 +1063,7 @@ void Koder::test_encode_nonBEC()
 void Koder::mult_test(int size, bool matrixPrint)
 {
     qDebug() << endl << "---------------Matrix_multiple_testing--------------";
+    qDebug() << "Size " << size << "x" << size;
     int** C;
 
     srand(time(NULL));
@@ -1122,7 +1123,7 @@ void Koder::mult_test(int size, bool matrixPrint)
         }
     }
     std::chrono::duration<double> diff = end - start;
-    qDebug() << "Time spend: " << diff.count() << endl;
+    qDebug() << "Time spend: " << diff.count() << "sec" << endl;
     for (int i = 0; i < size; ++i)
     {
         delete[] C[i];
@@ -1147,7 +1148,7 @@ void Koder::mult_test(int size, bool matrixPrint)
         }
     }
     diff = end - start;
-    qDebug() << "Time spend: " << diff.count() << endl;
+    qDebug() << "Time spend: " << diff.count() << "sec" << endl;
     for (int i = 0; i < size; ++i)
     {
         delete[] C[i];
@@ -1172,7 +1173,7 @@ void Koder::mult_test(int size, bool matrixPrint)
         }
     }
     diff = end - start;
-    qDebug() << "Time spend: " << diff.count() << endl;
+    qDebug() << "Time spend: " << diff.count() << "sec" << endl;
     for (int i = 0; i < size; ++i)
     {
         delete[] C[i];
