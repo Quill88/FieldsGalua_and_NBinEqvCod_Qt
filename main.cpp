@@ -30,6 +30,8 @@ int main()
 	cout << "(n, k, d)" << endl;
     cout << "(" << Kdr.n << ", " << Kdr.k << ", " << Kdr.d << ")" << endl;
 
+    Kdr.mult_test(1024,false);
+
 //--------------------------Testing encode NBEC--------------------------------
 //    Kdr.test_encode_nonBEC();
 

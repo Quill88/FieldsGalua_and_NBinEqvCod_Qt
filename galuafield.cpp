@@ -330,9 +330,6 @@ int** GaluaField::inverseMatrix(int **matrix, int s)
 
 int** GaluaField::MatrixMult(int **a, int m, int n, int** b, int n2, int q)
 {
-    omp_set_dynamic(1);
-    omp_set_num_threads(8);
-
 	if (n != n2) return nullptr;
 
 	int **res = new int *[m];
@@ -341,15 +338,6 @@ int** GaluaField::MatrixMult(int **a, int m, int n, int** b, int n2, int q)
 		res[i] = new int[q];
 	}
 
-//#pragma omp parallel for
-//    for (int i = 0; i < m*q; ++i) {
-//        int row = i / q;
-//        int temp = 0;
-//        for (int inner = 0; inner < n; ++inner) {
-//            temp = pl[temp][um[a[row][inner]][b[inner][i%q]]];
-//        }
-//        res[row][i%q] = temp;
-//    }
     for (int row = 0; row < m; ++row) {
         for (int col = 0; col < q; ++col) {
             int temp = 0;
@@ -360,6 +348,55 @@ int** GaluaField::MatrixMult(int **a, int m, int n, int** b, int n2, int q)
     }
 
 	return res;
+}
+
+int** GaluaField::MatrixMultOpenMP(int **a, int m, int n, int** b, int n2, int q)
+{
+    omp_set_dynamic(1);
+    omp_set_num_threads(8);
+
+    if (n != n2) return nullptr;
+
+    int **res = new int *[m];
+    for (int i = 0; i < m; ++i)
+    {
+        res[i] = new int[q];
+    }
+
+#pragma omp parallel for
+    for (int i = 0; i < m*q; ++i) {
+        int row = i / q;
+        int temp = 0;
+        for (int inner = 0; inner < n; ++inner) {
+            temp = pl[temp][um[a[row][inner]][b[inner][i%q]]];
+        }
+        res[row][i%q] = temp;
+    }
+
+    return res;
+}
+
+int** GaluaField::MatrixMultFast(int **a, int m, int n, int** b, int n2, int q)
+{
+    if (n != n2) return nullptr;
+
+    int **res = new int *[m];
+    for (int i = 0; i < m; ++i)
+    {
+        res[i] = new int[q];
+        for(int j = 0; j < q; ++j)
+            res[i][j] = 0;
+    }
+
+    for(int i = 0; i < m; ++i)
+        for(int k = 0; k < n; ++k)
+        {
+            int r = a[i][k];
+            for(int j = 0; j < q; ++j)
+                res[i][j] = pl[ res[i][j] ][ um[r][ b[k][j] ] ];
+        }
+
+    return res;
 }
 
 GaluaField::~GaluaField()

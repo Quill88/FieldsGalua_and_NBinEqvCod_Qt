@@ -40,6 +40,8 @@ public:
     int** RandMatrixSxS(int s);
 	int** inverseMatrix(int** matrix, int s);
 	int** MatrixMult(int **a, int m, int n, int** b, int n2, int q);
+    int** MatrixMultOpenMP(int **a, int m, int n, int** b, int n2, int q);
+    int** MatrixMultFast(int **a, int m, int n, int** b, int n2, int q);
 
 private:
     int m;

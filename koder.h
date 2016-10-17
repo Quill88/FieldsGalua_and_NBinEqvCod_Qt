@@ -53,6 +53,7 @@ public:
 	void Fact_test();
 	void test_encode_nonBEC();
 	void test(int,int,int);
+    void mult_test(int, bool);
 
     void encode(QString I, int**);
 	QString decode(int*);
